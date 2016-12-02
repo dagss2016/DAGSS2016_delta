@@ -1,26 +1,53 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
-    <body>
+<body>
 
-        <ui:composition template="/plantillas/plantillaComun.xhtml">
+<ui:composition template="/plantillas/plantillaComun.xhtml">
 
-            <ui:define name="tituloPagina">
-                Página principal de Farmacias
-            </ui:define>            
+    <ui:define name="tituloPagina">
+        Página principal de Farmacias
+    </ui:define>
 
-            <ui:define name="izquierda">
-                <ui:include src="/plantillas/menuComun.xhtml"/>
-            </ui:define>
+    <ui:define name="izquierda">
+        <ui:include src="/plantillas/menuComun.xhtml"/>
+    </ui:define>
 
-            <ui:define name="contenido">
-            </ui:define>
+    <ui:define name="contenido">
+        <h:form id="formularioListadoRecetas">
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Nº Tarjeta"/>
+                <h:inputText value="#{ventaControlador.numeroTarjeta}"/>
+                <h:commandButton value="Buscar" action="#{ventaControlador.doBuscarTarjeta}"/>
+            </h:panelGrid>
+            <h:dataTable value="#{ventaControlador.recetas}" var="receta">
+                <h:column headerText="Medicamento">
+                    <h:outputLabel value="#{receta.prescripcion.medicamento.nombre}"/>
+                </h:column>
+                <p:column headerText="Medico">
+                    <p:outputLabel value="#{receta.prescripcion.medico.nombre}"/>
+                </p:column>
+                <p:column headerText="Medico">
+                    <p:outputLabel value="#{receta.estadoReceta}"/>
+                </p:column>
+                <p:column headerText="Fin Validez">
+                    <p:outputLabel value="#{receta.finValidez}"/>
+                </p:column>
+                <h:column>
+                    <h:commandButton value="Vender" action="#{ventaControlador.doVenderReceta(receta)}"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
 
-        </ui:composition>
+    </ui:define>
 
-    </body>
+</ui:composition>
+
+</body>
 </html>
