@@ -43,7 +43,6 @@ public class VentaControlador implements Serializable{
 
     public void doBuscarTarjeta(){
         recetas = recetaDAO.buscarPorTarjetaPaciente(numeroTarjeta);
-
     }
     public void doVenderReceta(Receta receta){
         receta.setEstadoReceta(EstadoReceta.SERVIDA);
