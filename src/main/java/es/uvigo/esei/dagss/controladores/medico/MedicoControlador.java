@@ -6,9 +6,9 @@ package es.uvigo.esei.dagss.controladores.medico;
 import es.uvigo.esei.dagss.controladores.autenticacion.AutenticacionControlador;
 import es.uvigo.esei.dagss.dominio.daos.CitaDAO;
 import es.uvigo.esei.dagss.dominio.daos.MedicoDAO;
-import es.uvigo.esei.dagss.dominio.entidades.Cita;
-import es.uvigo.esei.dagss.dominio.entidades.Medico;
-import es.uvigo.esei.dagss.dominio.entidades.TipoUsuario;
+import es.uvigo.esei.dagss.dominio.daos.PrescripcionDAO;
+import es.uvigo.esei.dagss.dominio.entidades.*;
+
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -34,13 +34,18 @@ public class MedicoControlador implements Serializable {
 
     @Inject
     private AutenticacionControlador autenticacionControlador;
+
     @Inject
     CitaDAO citaDAO;
+
+    @Inject
+    PrescripcionDAO prescripcionDAO;
 
     @EJB
     private MedicoDAO medicoDAO;
 
     List<Cita> citasAnteriores;
+    List<Prescripcion> prescripciones;
 
     /**
      * Creates a new instance of AdministradorControlador
@@ -88,6 +93,14 @@ public class MedicoControlador implements Serializable {
         this.citasAnteriores = citasAnteriores;
     }
 
+    public List<Prescripcion> getPrescripciones() {
+        return prescripciones;
+    }
+
+    public void setPrescripciones(List<Prescripcion> prescripciones) {
+        this.prescripciones = prescripciones;
+    }
+
     private boolean parametrosAccesoInvalidos() {
         return (((dni == null) && (numeroColegiado == null)) || (password == null));
     }
@@ -126,7 +139,18 @@ public class MedicoControlador implements Serializable {
 
     //Acciones
     public String doShowCita(Cita citaActual) {
+        prescripciones = prescripcionDAO.buscarPorIdPaciente(citaActual.getPaciente().getId());
         citasAnteriores = citaDAO.buscarCitasAnteriores(citaActual.getMedico().getId(), citaActual.getPaciente().getId());
         return "detallesCita";
+    }
+
+    public String finalizarCitaCompletada(Cita citaActual){
+        citaActual.setEstado(EstadoCita.COMPLETADA);
+        return "index";
+    }
+
+    public String finalizarCitaPacienteAusente(Cita citaActual){
+        citaActual.setEstado(EstadoCita.AUSENTE);
+        return "index";
     }
 }
