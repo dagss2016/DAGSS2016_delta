@@ -26,7 +26,7 @@
                                      var="cita"
                                      selectionMode="single"
                                      selection="#{agendaControlador.citaActual}"
-                                     paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{cita.fecha}">
+                                     paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{cita.id}">
 
                             <p:ajax event="rowSelect" update="botonEditar "/>
 
@@ -51,7 +51,7 @@
                             <f:facet name="footer">
                                 <p:commandButton id="botonEditar" icon="ui-icon-pencil" value="Atender Paciente"
                                                  action="#{medicoControlador.doShowCita}"
-                                                 disabled="#{empty agendaControlador.citaActual and agendaControlador.citaActual.estado != 'PLANIFICADA'}"/>
+                                                 disabled="#{agendaControlador.citaActual.estado != 'PLANIFICADA'}"/>
                             </f:facet>
 
                         </p:dataTable>
