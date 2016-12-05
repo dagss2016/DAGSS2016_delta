@@ -32,6 +32,7 @@
         <c:if test="#{not empty ventaControlador.numeroTarjeta}">
             <h:form id="formularioListado">
 
+                <!--@elvariable id="receta" type="es.uvigo.esei.dagss.dominio.entidades.Receta"-->
                 <p:dataTable id="tablaListado"
                              value="#{ventaControlador.recetas}"
                              var="receta"
