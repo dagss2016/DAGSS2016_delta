@@ -22,6 +22,16 @@ public class AgendaControlador implements Serializable {
   @Inject
   MedicoControlador medicoControlador;
 
+  Cita citaActual;
+
+  public Cita getCitaActual() {
+    return citaActual;
+  }
+
+  public void setCitaActual(Cita citaActual) {
+    this.citaActual = citaActual;
+  }
+
   public AgendaControlador(){
   }
   @PostConstruct
