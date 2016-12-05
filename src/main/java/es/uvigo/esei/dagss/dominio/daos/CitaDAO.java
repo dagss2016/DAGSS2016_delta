@@ -26,4 +26,12 @@ public class CitaDAO  extends GenericoDAO<Cita>{
     return q.getResultList();
   }
 
+  public List<Cita> buscarCitasAnteriores(Long idMedico, Long idPaciente) {
+    TypedQuery<Cita> q = em.createQuery("SELECT c FROM Cita c " +
+      "WHERE c.medico.id = :idMedico AND c.paciente.id = :idPaciente AND c.fecha<CURRENT_DATE", Cita.class);
+    q.setParameter("idMedico", idMedico);
+    q.setParameter("idPaciente", idPaciente);
+    return q.getResultList();
+  }
+
 }

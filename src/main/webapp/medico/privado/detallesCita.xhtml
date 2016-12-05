@@ -20,10 +20,71 @@
             </ui:define>
 
             <ui:define name="contenido">
-                blablablafertgregeryhg
 
+                <h:form id="formularioListado">
+                <p:dataTable id="tablaListado" value="#{agendaControlador.citaActual}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Información del paciente"/>
+                    </f:facet>
+
+                    <p:column headerText="Datos paciente">
+                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                            <p:outputLabel value="Nombre:"/>
+                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.apellidos}, #{paciente.nombre}" />
+
+                            <p:outputLabel value="DNI:"/>
+                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.dni}" />
+
+                            <p:outputLabel value="N. Seg. Social:" />
+                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.numeroSeguridadSocial}" />
+
+                            <p:outputLabel value="Tarjeta Sanitaria:" />
+                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.numeroTarjetaSanitaria}" />
+                        </p:panelGrid>
+                    </p:column>
+
+                    <p:column headerText="Contacto">
+                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                            <p:outputLabel value="Domicilio:"/>
+                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.direccion.domicilio}. #{paciente.direccion.localidad} (#{paciente.direccion.provincia})" />
+
+                            <p:outputLabel value="Teléfono:"/>
+                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.telefono}" />
+
+                            <p:outputLabel value="e-mail:"/>
+                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.email}" />
+                        </p:panelGrid>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+                <h:form id="formularioListado2">
+                    <p:dataTable id="tablaListado2"
+                                 value="#{medicoControlador.citasAnteriores}"
+                                 var="cita"
+                                 selectionMode="single"
+                                 paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{cita.id}">
+
+
+                        <f:facet name="header">
+                            <h:outputText value="Citas anteriores"/>
+                        </f:facet>
+
+                        <p:column headerText="Fecha">
+                            <p:outputLabel value="#{cita.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
+
+                        <p:column headerText="Estado">
+                            <p:outputLabel value="#{cita.estado}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
             </ui:define>
         </ui:composition>
-
     </body>
 </html>
