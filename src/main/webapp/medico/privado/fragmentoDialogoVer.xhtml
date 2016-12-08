@@ -9,6 +9,38 @@
         <p:dialog id="dialogoVer" widgetVar="DialogoVer" modal="true" resizable="false"
                   appendTo="@(body)" header="Datos Tratamiento">
             <h:form id="formularioVer">
+                <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
+                <p:dataTable id="tablaListado"
+                             value="#{medicoControlador.tratamientoActual.prescripciones}"
+                             var="prescripcion"
+                             selectionMode="single"
+                             paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{prescripcion.id}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Listado de Prescripciones"/>
+                    </f:facet>
+
+                    <p:column headerText="Medicamento">
+                        <p:outputLabel value="#{prescripcion.medicamento.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Dosis">
+                        <p:outputLabel value="#{prescripcion.dosis}" />
+                    </p:column>
+
+                    <p:column headerText="Fecha Inicio">
+                        <p:outputLabel value="#{prescripcion.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+
+                    <p:column headerText="Fecha Fin">
+                        <p:outputLabel value="#{prescripcion.fechaFin}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+
+                </p:dataTable>
             </h:form>
         </p:dialog>
     </ui:composition>
