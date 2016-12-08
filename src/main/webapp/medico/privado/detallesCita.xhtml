@@ -70,6 +70,7 @@
             </h:form>
 
                 <h:form id="formularioListado2">
+                    <!--@elvariable id="cita" type="es.uvigo.esei.dagss.dominio.entidades.Cita"-->
                     <p:dataTable id="tablaListado2"
                                  value="#{medicoControlador.citasAnteriores}"
                                  var="cita"
@@ -94,12 +95,12 @@
                     </p:dataTable>
                 </h:form>
                 <h:form id="formularioListadoo">
-                    <!--@elvariable id="prescipcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
+                    <!--@elvariable id="tratamiento" type="es.uvigo.esei.dagss.dominio.entidades.Tratamiento"-->
                     <p:dataTable id="tablaListadoo"
-                                 value="#{medicoControlador.prescripciones}"
-                                 var="prescipcion"
+                                 value="#{medicoControlador.tratamientos}"
+                                 var="tratamiento"
                                  selectionMode="single"
-                                 paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{prescipcion.id}">
+                                 paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{tratamiento.id}">
 
                         <p:ajax event="rowSelect" update="botonNuevo botonVer botonEditar botonBorrar "/>
 
@@ -107,24 +108,14 @@
                             <h:outputText value="Tratamientos"/>
                         </f:facet>
 
-                        <p:column headerText="Dosis">
-                            <p:outputLabel value="#{prescipcion.dosis}" />
+                        <p:column headerText="Descripción">
+                            <p:outputLabel value="#{tratamiento.descripcion}" />
                         </p:column>
 
-                        <p:column headerText="Fecha Inicio">
-                            <p:outputLabel value="#{prescipcion.fechaInicio}">
+                        <p:column headerText="Fecha">
+                            <p:outputLabel value="#{tratamiento.fecha}">
                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                             </p:outputLabel>
-                        </p:column>
-
-                        <p:column headerText="Fecha Fin">
-                            <p:outputLabel value="#{prescipcion.fechaFin}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                            </p:outputLabel>
-                        </p:column>
-
-                        <p:column headerText="Indicaciones">
-                            <p:outputLabel value="#{prescipcion.indicaciones}" />
                         </p:column>
 
                         <f:facet name="footer">

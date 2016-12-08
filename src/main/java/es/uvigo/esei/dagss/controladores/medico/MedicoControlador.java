@@ -7,6 +7,7 @@ import es.uvigo.esei.dagss.controladores.autenticacion.AutenticacionControlador;
 import es.uvigo.esei.dagss.dominio.daos.CitaDAO;
 import es.uvigo.esei.dagss.dominio.daos.MedicoDAO;
 import es.uvigo.esei.dagss.dominio.daos.PrescripcionDAO;
+import es.uvigo.esei.dagss.dominio.daos.TratamientoDAO;
 import es.uvigo.esei.dagss.dominio.entidades.*;
 
 import javax.inject.Named;
@@ -41,11 +42,15 @@ public class MedicoControlador implements Serializable {
     @Inject
     PrescripcionDAO prescripcionDAO;
 
+    @Inject
+    TratamientoDAO tratamientoDAO;
+
     @EJB
     private MedicoDAO medicoDAO;
 
     List<Cita> citasAnteriores;
     List<Prescripcion> prescripciones;
+    List<Tratamiento> tratamientos;
 
     /**
      * Creates a new instance of AdministradorControlador
@@ -101,6 +106,14 @@ public class MedicoControlador implements Serializable {
         this.prescripciones = prescripciones;
     }
 
+    public List<Tratamiento> getTratamientos() {
+        return tratamientos;
+    }
+
+    public void setTratamientos(List<Tratamiento> tratamientos) {
+        this.tratamientos = tratamientos;
+    }
+
     private boolean parametrosAccesoInvalidos() {
         return (((dni == null) && (numeroColegiado == null)) || (password == null));
     }
@@ -139,7 +152,8 @@ public class MedicoControlador implements Serializable {
 
     //Acciones
     public String doShowCita(Cita citaActual) {
-        prescripciones = prescripcionDAO.buscarPorIdPaciente(citaActual.getPaciente().getId());
+        tratamientos = tratamientoDAO.buscarPorIDPaciente(citaActual.getPaciente().getId());
+        //prescripciones = prescripcionDAO.buscarPorIdPaciente(citaActual.getPaciente().getId());
         citasAnteriores = citaDAO.buscarCitasAnteriores(citaActual.getMedico().getId(), citaActual.getPaciente().getId());
         return "detallesCita";
     }
