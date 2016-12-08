@@ -100,6 +100,7 @@
                                  value="#{medicoControlador.tratamientos}"
                                  var="tratamiento"
                                  selectionMode="single"
+                                 selection="#{medicoControlador.tratamientoActual}"
                                  paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{tratamiento.id}">
 
                         <p:ajax event="rowSelect" update="botonNuevo botonVer botonEditar botonBorrar "/>
@@ -119,13 +120,28 @@
                         </p:column>
 
                         <f:facet name="footer">
-                            <p:commandButton id="botonNuevo" icon="ui-icon-plus" value="Nuevo" />
-                            <p:commandButton id="botonVer" icon="ui-icon-search" value="Ver"/>
-                            <p:commandButton id="botonEditar" icon="ui-icon-search" value="Editar"/>
-                            <p:commandButton id="botonBorrar" icon="ui-icon-trash" value="Borrar" />
+                            <p:commandButton id="botonNuevo" icon="ui-icon-plus" value="Nuevo"
+                                             actionListener="#{medicoControlador.doNewTratamiento()}"
+                                             update=":formularioNuevo"
+                                             oncomplete="PF('DialogoNuevo').show()"/>
+                            <p:commandButton id="botonVer" icon="ui-icon-search" value="Ver"
+                                             disabled="#{empty medicoControlador.tratamientoActual}"
+                                             update=":formularioVer"
+                                             oncomplete="PF('DialogoVer').show()"/>
+                            <p:commandButton id="botonEditar" icon="ui-icon-search" value="Editar"
+                                             disabled="#{empty medicoControlador.tratamientoActual}"
+                                             update=":formularioEditar"
+                                             oncomplete="PF('DialogoEditar').show()"/>
+                            <p:commandButton id="botonBorrar" icon="ui-icon-trash" value="Borrar"
+                                             actionListener="#{medicoControlador.doDeleteTratamiento(
+                                             medicoControlador.tratamientoActual)}"
+                                             disabled="#{empty medicoControlador.tratamientoActual}"/>
                         </f:facet>
                     </p:dataTable>
                 </h:form>
+                <ui:include src="fragmentoDialogoVer.xhtml"/>
+                <ui:include src="fragmentoDialogoEditar.xhtml"/>
+                <ui:include src="fragmentoDialogoNuevo.xhtml"/>
             </ui:define>
         </ui:composition>
     </body>

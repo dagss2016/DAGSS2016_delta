@@ -5,32 +5,38 @@ package es.uvigo.esei.dagss.dominio.entidades;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@SuppressWarnings("unused")
 public class Tratamiento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @ManyToOne
-    Paciente paciente;
+    private Paciente paciente;
 
-    @Size(min = 0, max = 255)
-    String descripcion;
+    @Size(max = 255)
+    private String descripcion;
 
     @Temporal(javax.persistence.TemporalType.DATE)
-    Date fecha;
+    private Date fecha;
 
-    public Tratamiento() {
-    }
+    @OneToMany(mappedBy = "tratamiento", cascade = CascadeType.ALL)
+    private List<Prescripcion> prescripciones = new ArrayList<>();
+
+    public Tratamiento() {}
 
     public Tratamiento(Paciente paciente, String descripcion, Date fecha) {
         this.paciente = paciente;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.prescripciones = new ArrayList<>();
     }
 
     public Long getId() {
@@ -65,6 +71,14 @@ public class Tratamiento {
         this.fecha = fecha;
     }
 
+    public List<Prescripcion> getPrescripciones() {
+        return prescripciones;
+    }
+
+    public void setPrescripciones(List<Prescripcion> prescripciones) {
+        this.prescripciones = prescripciones;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -74,19 +88,12 @@ public class Tratamiento {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
+
         final Prescripcion other = (Prescripcion) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 }
