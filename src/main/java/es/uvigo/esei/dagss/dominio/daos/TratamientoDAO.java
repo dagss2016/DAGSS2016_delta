@@ -16,7 +16,7 @@ public class TratamientoDAO extends GenericoDAO<Tratamiento> {
 
     public List<Tratamiento> buscarPorIDPaciente(Long id) {
         TypedQuery<Tratamiento> q = em.createQuery("SELECT t FROM Tratamiento AS t "
-                + "  WHERE t.paciente.id = :id", Tratamiento.class);
+                + "  WHERE t.paciente.id = :id ORDER BY t.fecha ASC", Tratamiento.class);
         q.setParameter("id", id);
 
         return q.getResultList();

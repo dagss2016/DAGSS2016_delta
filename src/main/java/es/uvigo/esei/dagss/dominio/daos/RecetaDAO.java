@@ -21,7 +21,7 @@ public class RecetaDAO extends GenericoDAO<Receta>{
     public List<Receta> buscarPorTarjetaPaciente(String numeroTarjeta){
         Calendar cal = Calendar.getInstance();
         TypedQuery<Receta> q = em.createQuery("SELECT r FROM Receta r " +
-          "WHERE  r.finValidez >= :date AND r.prescripcion.paciente.numeroTarjetaSanitaria = :nTarjeta", Receta.class);
+          "WHERE  r.finValidez >= :date AND r.prescripcion.paciente.numeroTarjetaSanitaria = :nTarjeta ORDER BY r.inicioValidez ASC", Receta.class);
         q.setParameter("nTarjeta", numeroTarjeta);
         q.setParameter("date", cal.getTime());
         return q.getResultList();

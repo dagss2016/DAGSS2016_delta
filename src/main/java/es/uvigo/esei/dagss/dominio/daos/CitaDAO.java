@@ -21,14 +21,14 @@ public class CitaDAO  extends GenericoDAO<Cita>{
 
   public List<Cita> buscarPorIdMedico(Long id) {
     TypedQuery<Cita> q = em.createQuery("SELECT c FROM Cita c " +
-      "WHERE c.medico.id = :idMedico AND c.fecha=CURRENT_DATE", Cita.class);
+      "WHERE c.medico.id = :idMedico AND c.fecha=CURRENT_DATE ORDER BY c.hora ASC ", Cita.class);
     q.setParameter("idMedico", id);
     return q.getResultList();
   }
 
   public List<Cita> buscarCitasAnteriores(Long idMedico, Long idPaciente) {
     TypedQuery<Cita> q = em.createQuery("SELECT c FROM Cita c " +
-      "WHERE c.medico.id = :idMedico AND c.paciente.id = :idPaciente AND c.fecha<CURRENT_DATE", Cita.class);
+      "WHERE c.medico.id = :idMedico AND c.paciente.id = :idPaciente AND c.fecha<CURRENT_DATE order by c.fecha ASC", Cita.class);
     q.setParameter("idMedico", idMedico);
     q.setParameter("idPaciente", idPaciente);
     return q.getResultList();
