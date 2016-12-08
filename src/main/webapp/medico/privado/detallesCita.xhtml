@@ -101,7 +101,7 @@
                                  selectionMode="single"
                                  paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{prescipcion.id}">
 
-                        <p:ajax event="rowSelect" update="botonNuevoTratamiento "/>
+                        <p:ajax event="rowSelect" update="botonNuevo botonVer botonEditar botonBorrar "/>
 
                         <f:facet name="header">
                             <h:outputText value="Tratamientos"/>
@@ -128,7 +128,10 @@
                         </p:column>
 
                         <f:facet name="footer">
-                            <p:commandButton id="botonNuevoTratamiento" icon="ui-icon-plus" value="Nuevo Tratamiento"/>
+                            <p:commandButton id="botonNuevo" icon="ui-icon-plus" value="Nuevo" />
+                            <p:commandButton id="botonVer" icon="ui-icon-search" value="Ver"/>
+                            <p:commandButton id="botonEditar" icon="ui-icon-search" value="Editar"/>
+                            <p:commandButton id="botonBorrar" icon="ui-icon-trash" value="Borrar" />
                         </f:facet>
                     </p:dataTable>
                 </h:form>

@@ -146,11 +146,13 @@ public class MedicoControlador implements Serializable {
 
     public String finalizarCitaCompletada(Cita citaActual){
         citaActual.setEstado(EstadoCita.COMPLETADA);
+        this.citaDAO.actualizar(citaActual);
         return "index";
     }
 
     public String finalizarCitaPacienteAusente(Cita citaActual){
         citaActual.setEstado(EstadoCita.AUSENTE);
+        this.citaDAO.actualizar(citaActual);
         return "index";
     }
 }
