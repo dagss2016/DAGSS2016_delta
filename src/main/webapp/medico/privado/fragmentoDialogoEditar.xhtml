@@ -49,22 +49,31 @@
 
             <h:form id="formularioEditarPrescripcion">
 
-                <p:inputText value="#{medicoControlador.prescripcionActual.medicamento.nombre}" />
+                <p:outputLabel value="Min Length (3):" for="medicamento" />
+                <p:autoComplete id="medicamento" minQueryLength="3"  itemValue="#{medicoControlador.prescripcionActual.medicamento.nombre}" value="#{medicoControlador.prescripcionActual.medicamento}"
+                                completeMethod="#{medicoControlador.completeMedicamentos()}" effect="fade" />
 
-                <p:inputText value="#{medicoControlador.prescripcionActual.dosis}" />
+                <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}" />
 
-                <p:calendar id="effects" pattern="dd-MM-yyyy" value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold" />
+                <p:inputText id="indicaciones" value="#{medicoControlador.prescripcionActual.indicaciones}" />
 
-                <p:calendar id="effff"  pattern="dd-MM-yyyy" value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold"/>
+                <p:calendar id="fechaInicio" pattern="dd-MM-yyyy" value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold" />
+
+                <p:calendar id="fechaFin"  pattern="dd-MM-yyyy" value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold"/>
 
                 <p:commandButton id="botonActualizar" icon="ui-icon-refresh" value="Actualizar"
                                  actionListener="#{medicoControlador.doEditTratamiento()}"
                                  disabled="#{empty medicoControlador.prescripcionActual}"
                                  update=":formularioEditar:tablaListado,:formularioEditarPrescripcion"
-                                 oncomplete="PF('DialogoEditar').hide()"/>
+                                 />
 
                 <p:commandButton value="Cancelar" onclick="PF('DialogoEditar').hide()"
                                  actionListener="#{medicoControlador.clear}"/>
+
+                <p:commandButton id="botonNuevo" icon="ui-icon-plus" value="Nueva"
+                                 actionListener="#{medicoControlador.doGuardarPrescripcion()}"
+                                 update=":formularioEditar:tablaListado,:formularioEditarPrescripcion"
+                                 />
 
             </h:form>
 

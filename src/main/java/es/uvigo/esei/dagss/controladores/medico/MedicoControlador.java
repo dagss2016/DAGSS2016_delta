@@ -4,10 +4,7 @@
 package es.uvigo.esei.dagss.controladores.medico;
 
 import es.uvigo.esei.dagss.controladores.autenticacion.AutenticacionControlador;
-import es.uvigo.esei.dagss.dominio.daos.CitaDAO;
-import es.uvigo.esei.dagss.dominio.daos.MedicoDAO;
-import es.uvigo.esei.dagss.dominio.daos.PrescripcionDAO;
-import es.uvigo.esei.dagss.dominio.daos.TratamientoDAO;
+import es.uvigo.esei.dagss.dominio.daos.*;
 import es.uvigo.esei.dagss.dominio.entidades.*;
 
 import javax.ejb.EJB;
@@ -30,6 +27,8 @@ public class MedicoControlador implements Serializable {
     PrescripcionDAO prescripcionDAO;
     @Inject
     TratamientoDAO tratamientoDAO;
+    @Inject
+    MedicamentoDAO medicamentoDAO;
     private Medico medicoActual;
     private String dni;
     private String numeroColegiado;
@@ -188,7 +187,7 @@ public class MedicoControlador implements Serializable {
         }
 
         tratamientoDAO.actualizar(tratamientoActual);
-        clear();
+        doNewPrescripcion();
     }
 
     public String doDeleteTratamiento(Tratamiento tratamiento) {
@@ -198,8 +197,23 @@ public class MedicoControlador implements Serializable {
         return "detallesCita";
     }
 
+    public void doNewPrescripcion(){
+      prescripcionActual = new Prescripcion();
+      prescripcionActual.setMedico(medicoActual);
+      prescripcionActual.setTratamiento(tratamientoActual);
+      prescripcionActual.setPaciente(tratamientoActual.getPaciente());
+    }
+
+    public void doGuardarPrescripcion(){
+      tratamientoActual.getPrescripciones().add(prescripcionActual);
+      tratamientoDAO.actualizar(tratamientoActual);
+    }
 
     public void clear() {
         prescripcionActual = new Prescripcion();
+    }
+
+    public List<Medicamento> completeMedicamentos(){
+        return medicamentoDAO.buscarTodos();
     }
 }

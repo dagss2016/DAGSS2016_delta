@@ -130,6 +130,7 @@
                                              oncomplete="PF('DialogoVer').show()"/>
                             <p:commandButton id="botonEditar" icon="ui-icon-search" value="Editar"
                                              disabled="#{empty medicoControlador.tratamientoActual}"
+                                             actionListener="#{medicoControlador.doNewPrescripcion()}"
                                              update=":formularioEditar"
                                              oncomplete="PF('DialogoEditar').show()"/>
                             <p:commandButton id="botonBorrar" icon="ui-icon-trash" value="Borrar"
