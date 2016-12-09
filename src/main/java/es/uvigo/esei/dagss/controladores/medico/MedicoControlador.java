@@ -193,8 +193,11 @@ public class MedicoControlador implements Serializable {
 
     public String doDeleteTratamiento(Tratamiento tratamiento) {
         tratamientoDAO.eliminar(tratamiento);
+        tratamientos = tratamientoDAO.buscarPorIDPaciente(tratamiento.getPaciente().getId());
+        tratamientoActual = null;
         return "detallesCita";
     }
+
 
     public void clear() {
         prescripcionActual = new Prescripcion();

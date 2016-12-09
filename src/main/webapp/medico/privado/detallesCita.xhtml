@@ -135,6 +135,7 @@
                             <p:commandButton id="botonBorrar" icon="ui-icon-trash" value="Borrar"
                                              actionListener="#{medicoControlador.doDeleteTratamiento(
                                              medicoControlador.tratamientoActual)}"
+                                             update="tablaListadoo"
                                              disabled="#{empty medicoControlador.tratamientoActual}"/>
                         </f:facet>
                     </p:dataTable>
