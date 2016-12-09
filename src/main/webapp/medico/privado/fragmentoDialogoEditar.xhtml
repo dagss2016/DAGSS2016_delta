@@ -53,14 +53,9 @@
 
                 <p:inputText value="#{medicoControlador.prescripcionActual.dosis}" />
 
-                <p:inputText value="#{medicoControlador.prescripcionActual.fechaInicio}">
-                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                </p:inputText>
+                <p:calendar id="effects" pattern="dd-MM-yyyy" value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold" />
 
-                <p:inputText value="#{medicoControlador.prescripcionActual.fechaFin}">
-                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                </p:inputText>
-
+                <p:calendar id="effff"  pattern="dd-MM-yyyy" value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold"/>
 
                 <p:commandButton id="botonActualizar" icon="ui-icon-refresh" value="Actualizar"
                                  actionListener="#{medicoControlador.doEditTratamiento()}"
