@@ -9,7 +9,70 @@
         <p:dialog id="dialogoEditar" widgetVar="DialogoEditar" modal="true" resizable="false"
                   appendTo="@(body)" header="Editar Tratamiento">
             <h:form id="formularioEditar">
+                <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
+                <p:dataTable id="tablaListado"
+                             value="#{medicoControlador.tratamientoActual.prescripciones}"
+                             var="prescripcion"
+                             selectionMode="single"
+                             selection="#{medicoControlador.prescripcionActual}"
+                             paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{prescripcion.id}">
+
+
+                    <p:ajax event="rowSelect" update=" :formularioEditarPrescripcion :formularioEditarPrescripcion:botonActualizar "/>
+
+                    <f:facet name="header">
+                        <h:outputText value="Listado de Prescripciones"/>
+                    </f:facet>
+
+                    <p:column headerText="Medicamento">
+                        <p:outputLabel value="#{prescripcion.medicamento.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Dosis">
+                        <p:outputLabel value="#{prescripcion.dosis}" />
+                    </p:column>
+
+                    <p:column headerText="Fecha Inicio">
+                        <p:outputLabel value="#{prescripcion.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+
+                    <p:column headerText="Fecha Fin">
+                        <p:outputLabel value="#{prescripcion.fechaFin}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+
+                </p:dataTable>
             </h:form>
+
+            <h:form id="formularioEditarPrescripcion">
+
+                <p:inputText value="#{medicoControlador.prescripcionActual.medicamento.nombre}" />
+
+                <p:inputText value="#{medicoControlador.prescripcionActual.dosis}" />
+
+                <p:inputText value="#{medicoControlador.prescripcionActual.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </p:inputText>
+
+                <p:inputText value="#{medicoControlador.prescripcionActual.fechaFin}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </p:inputText>
+
+
+                <p:commandButton id="botonActualizar" icon="ui-icon-refresh" value="Actualizar"
+                                 actionListener="#{medicoControlador.doEditTratamiento()}"
+                                 disabled="#{empty medicoControlador.prescripcionActual}"
+                                 update=":formularioEditar:tablaListado,:formularioEditarPrescripcion"
+                                 oncomplete="PF('DialogoEditar').hide()"/>
+
+                <p:commandButton value="Cancelar" onclick="PF('DialogoEditar').hide()"
+                                 actionListener="#{medicoControlador.clear}"/>
+
+            </h:form>
+
         </p:dialog>
     </ui:composition>
 </html>
