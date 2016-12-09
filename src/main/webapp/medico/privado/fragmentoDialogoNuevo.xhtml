@@ -10,6 +10,81 @@
         <p:dialog id="dialogoNuevo" widgetVar="DialogoNuevo" modal="true" resizable="false"
                   appendTo="@(body)" header="Nuevo Tratamiento">
             <h:form id="formularioNuevo">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{medicoControlador.tratamientoActual != null}">
+                        <p:outputLabel value="Descripcion del Tratamiento" for="descripcion"/>
+                        <p:inputText id="descripcion" value="#{medicoControlador.tratamientoActual.descripcion}" required="true"/>
+                    </p:panelGrid>
+                </h:panelGroup>
+
+
+                <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
+                <p:dataTable id="tablaListado"
+                             value="#{medicoControlador.tratamientoActual.prescripciones}"
+                             var="prescripcion"
+                             selectionMode="single"
+                             selection="#{medicoControlador.prescripcionActual}"
+                             paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{prescripcion.id}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Listado de Prescripciones"/>
+                    </f:facet>
+
+                    <p:column headerText="Medicamento">
+                        <p:outputLabel value="#{prescripcion.medicamento.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Dosis">
+                        <p:outputLabel value="#{prescripcion.dosis}" />
+                    </p:column>
+
+                    <p:column headerText="Fecha Inicio">
+                        <p:outputLabel value="#{prescripcion.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+
+                    <p:column headerText="Fecha Fin">
+                        <p:outputLabel value="#{prescripcion.fechaFin}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+                </p:dataTable>
+
+                <h:panelGroup id="display2">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="Medicamento:" for="fechaFin"/>
+                        <p:autoComplete id="medicamento" minQueryLength="3"
+                                        itemValue="#{medicoControlador.prescripcionActual.medicamento}"
+                                        itemLabel="#{medicoControlador.prescripcionActual.medicamento.nombre}"
+                                        completeMethod="#{medicoControlador.completeMedicamentos()}" effect="fade" />
+
+                        <p:outputLabel value="Dosis:" for="dosis"/>
+                        <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}"/>
+
+                        <p:outputLabel value="Indicaciones:" for="indicaciones"/>
+                        <p:inputText id="indicaciones" value="#{medicoControlador.prescripcionActual.indicaciones}" />
+
+                        <p:outputLabel value="Fecha Inicio:" for="fechaInicio"/>
+                        <p:calendar id="fechaInicio" pattern="dd-MM-yyyy" value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold" />
+
+                        <p:outputLabel value="Fecha Fin:" for="fechaFin"/>
+                        <p:calendar id="fechaFin"  pattern="dd-MM-yyyy" value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold"/>
+
+                    </p:panelGrid>
+
+                    <p:commandButton value="Añadir Prescripcion" actionListener="#{medicoControlador.doGuardarPrescripcion}"
+                                     update="display2,:formularioListado:tablaListado,"/>
+                </h:panelGroup>
+            </h:form>
+
+            <h:form>
+                <h:panelGroup>
+                    <p:commandButton value="Guardar Tratamiento" actionListener="#{medicoControlador.doNewTratamiento()}"
+                                     oncomplete="PF('DialogoNuevo').hide()"/>
+                    <p:commandButton value="Cancelar" onclick="PF('DialogoNuevo').hide()"/>
+                </h:panelGroup>
             </h:form>
         </p:dialog>
     </ui:composition>
