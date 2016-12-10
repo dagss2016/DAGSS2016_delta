@@ -28,6 +28,10 @@
                         <p:outputLabel value="#{prescripcion.dosis}" />
                     </p:column>
 
+                    <p:column headerText="Indicaciones">
+                        <p:outputLabel value="#{prescripcion.indicaciones}" />
+                    </p:column>
+
                     <p:column headerText="Fecha Inicio">
                         <p:outputLabel value="#{prescripcion.fechaInicio}">
                             <f:convertDateTime pattern="dd/MM/yyyy"/>

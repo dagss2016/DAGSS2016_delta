@@ -136,10 +136,9 @@
                                      update=":formularioEditar"
                                      oncomplete="PF('DialogoEditar').show()"/>
                     <p:commandButton id="botonBorrar" icon="ui-icon-trash" value="Borrar"
-                                     actionListener="#{medicoControlador.doDeleteTratamiento(
-                                             medicoControlador.tratamientoActual)}"
+                                     actionListener="#{medicoControlador.doDeleteTratamiento(medicoControlador.tratamientoActual)}"
                                      update="tablaListadoo"
-                                     disabled="#{empty medicoControlador.tratamientoActual}"/>
+                                     disabled="#{medicoControlador.tratamientoActual == null}"/>
                 </f:facet>
             </p:dataTable>
         </h:form>

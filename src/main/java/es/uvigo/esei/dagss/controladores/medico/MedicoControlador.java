@@ -6,7 +6,6 @@ package es.uvigo.esei.dagss.controladores.medico;
 import es.uvigo.esei.dagss.controladores.autenticacion.AutenticacionControlador;
 import es.uvigo.esei.dagss.dominio.daos.*;
 import es.uvigo.esei.dagss.dominio.entidades.*;
-import es.uvigo.esei.dagss.dominio.services.PrescripcionService;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -40,8 +39,6 @@ public class MedicoControlador implements Serializable {
     private AutenticacionControlador autenticacionControlador;
     @EJB
     private MedicoDAO medicoDAO;
-
-    PrescripcionService prescripcionService = new PrescripcionService();
 
     private List<Cita> citasAnteriores;
     private List<Tratamiento> tratamientos;
@@ -194,8 +191,8 @@ public class MedicoControlador implements Serializable {
         tratamientoActual.setPaciente(paciente);
         tratamientoActual.setPrescripciones(prescripciones);
         tratamientoDAO.actualizar(tratamientoActual);
-        prescripcionService.generarRecetas(tratamientoActual);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
+        tratamientoActual = null;
         clear();
     }
 

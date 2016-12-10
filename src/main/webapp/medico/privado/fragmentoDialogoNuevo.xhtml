@@ -28,6 +28,10 @@
                     <p:outputLabel value="#{prescripcion.dosis}"/>
                 </p:column>
 
+                <p:column headerText="Indicaciones">
+                    <p:outputLabel value="#{prescripcion.indicaciones}"/>
+                </p:column>
+
                 <p:column headerText="Fecha Inicio">
                     <p:outputLabel value="#{prescripcion.fechaInicio}">
                         <f:convertDateTime pattern="dd/MM/yyyy"/>
@@ -44,7 +48,7 @@
 
         <h:form id="formularioNNPrescripcion">
 
-            <p:outputLabel value="Medicamento:" for="medicamento"/>
+            <p:outputLabel value="Medicamento" for="medicamento"/>
             <p:selectOneMenu id="medicamento" value="#{medicoControlador.prescripcionActual.medicamento}"
                              converter="omnifaces.SelectItemsConverter">
                 <f:selectItem itemValue="&nbsp;"/>
@@ -65,13 +69,17 @@
                              effect="fade" />
              -->
 
+            <p:outputLabel value="Dosis"/>
             <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}"/>
 
+            <p:outputLabel value="Indicaciones"/>
             <p:inputText id="indicaciones" value="#{medicoControlador.prescripcionActual.indicaciones}"/>
 
+            <p:outputLabel value="Fecha Inicio"/>
             <p:calendar id="fechaInicio" pattern="dd-MM-yyyy"
                         value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold"/>
 
+            <p:outputLabel value="Fecha Fin"/>
             <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
                         value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold"/>
 
