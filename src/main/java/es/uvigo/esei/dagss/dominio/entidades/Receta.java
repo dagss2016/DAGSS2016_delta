@@ -100,14 +100,6 @@ public class Receta implements Serializable {
         this.finValidez = finValidez;
     }
 
-    public EstadoReceta getEstado() {
-        return estadoReceta;
-    }
-
-    public void setEstado(EstadoReceta estado) {
-        this.estadoReceta = estado;
-    }
-
     public EstadoReceta getEstadoReceta() {
         return estadoReceta;
     }

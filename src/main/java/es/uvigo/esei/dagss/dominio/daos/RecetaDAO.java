@@ -7,6 +7,7 @@ package es.uvigo.esei.dagss.dominio.daos;
 import es.uvigo.esei.dagss.dominio.entidades.Receta;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Stateless
 @LocalBean
+@Named(value = "recetaDAO")
 public class RecetaDAO extends GenericoDAO<Receta>{
 
     public List<Receta> buscarPorTarjetaPaciente(String numeroTarjeta){
