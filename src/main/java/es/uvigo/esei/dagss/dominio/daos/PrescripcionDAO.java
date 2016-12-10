@@ -28,4 +28,14 @@ public class PrescripcionDAO extends GenericoDAO<Prescripcion> {
 
         return q.getResultList();
     }
+
+    public List<Prescripcion> buscarPorIdPacienteAndIdTratamiento(Long idPaciente, Long idTratamiento) {
+        TypedQuery<Prescripcion> q = em.createQuery("SELECT p FROM Prescripcion AS p "
+                + "  WHERE p.paciente.id = :idP  AND p.tratamiento.id = :idT", Prescripcion.class);
+        q.setParameter("idP", idPaciente);
+        q.setParameter("idT", idTratamiento);
+
+
+        return q.getResultList();
+    }
 }
