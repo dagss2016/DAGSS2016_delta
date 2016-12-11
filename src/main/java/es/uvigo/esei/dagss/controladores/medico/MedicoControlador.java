@@ -200,6 +200,13 @@ public class MedicoControlador implements Serializable {
         clear();
     }
 
+    public void doActualizarTratamiento(Paciente paciente){
+        tratamientoDAO.actualizar(tratamientoActual);
+        tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
+        tratamientoActual = null;
+        clear();
+    }
+
     public void doNewTratamiento() {
 
         tratamientoActual = new Tratamiento();
@@ -263,6 +270,15 @@ public class MedicoControlador implements Serializable {
 
     public List<Medicamento> completeMedicamentos(String descripcion) {
         return medicamentoDAO.buscarPorDescripcion(descripcion);
+    }
+
+    public void doDeletePrescripcion() {
+
+        for ( Prescripcion prescripcion : tratamientoActual.getPrescripciones() ) {
+            if( prescripcionActual.getId().equals(prescripcion.getId()) ) {
+                tratamientoActual.getPrescripciones().remove(prescripcion);
+            }
+        }
     }
 
     public List<Medicamento> todosMedicamentos() {

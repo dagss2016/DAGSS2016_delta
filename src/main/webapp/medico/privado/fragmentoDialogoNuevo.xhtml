@@ -100,7 +100,7 @@
                 <p:commandButton value="Guardar Tratamiento"
                                  actionListener="#{medicoControlador.doGuardarTratamiento(agendaControlador.citaActual.paciente)}"
                                  oncomplete="PF('DialogoNuevo').hide()"
-                                 update=":formularioListadoo:tablaListadoo"/>
+                                 update="@(:tablaListadoo)"/>
 
                 <p:commandButton value="Cancelar" onclick="PF('DialogoNuevo').hide()"/>
             </h:panelGroup>

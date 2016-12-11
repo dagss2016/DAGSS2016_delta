@@ -3,17 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:b="http://bootsfaces.net/ui">
     <ui:composition>
         <h:form>
-            <p:menu>
-                <p:menuitem rendered="#{autenticacionControlador.usuarioAutenticado}"
-                            value="Desconectar"
-                            action="#{autenticacionControlador.doLogOut()}"
-                            icon="ui-icon-extlink"/>
-            </p:menu>
-
+            <b:commandButton styleClass="btn-primary" rendered="#{autenticacionControlador.usuarioAutenticado}" value="Desconectar"
+                             action="#{autenticacionControlador.doLogOut()}" iconAwesome="fa-external-link"/>
         </h:form>
     </ui:composition>
 </html>
-

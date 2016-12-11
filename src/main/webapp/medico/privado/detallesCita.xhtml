@@ -5,6 +5,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <body>
@@ -21,130 +22,150 @@
 
     <ui:define name="contenido">
 
-        <h:form id="formularioListado">
-            <p:dataTable id="tablaListado" value="#{agendaControlador.citaActual}">
+        <div class="container-fluid">
+            <div class="col-sm-10 col-lg-offset-1">
 
-                <p:ajax event="rowSelect" update="botonFinCita botonFinCitaAusente "/>
+                <p:accordionPanel multiple="true">
+                    <p:tab title="Información del paciente">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <h:form id="formularioListado" styleClass="form">
+                                <p:dataTable id="tablaListado" value="#{agendaControlador.citaActual}"
+                                             styleClass="table table-responsive">
 
-                <f:facet name="header">
-                    <h:outputText value="Información del paciente"/>
-                </f:facet>
+                                    <p:ajax event="rowSelect" update="botonFinCita botonFinCitaAusente "/>
 
-                <!--@elvariable id="paciente" type="es.uvigo.esei.dagss.dominio.entidades.Paciente"-->
-                <p:column headerText="Datos paciente">
-                    <p:panelGrid columns="2" styleClass="ui-noborder">
-                        <p:outputLabel value="Nombre:"/>
-                        <p:outputLabel value="#{agendaControlador.citaActual.paciente.apellidos}, #{paciente.nombre}"/>
+                                    <!--@elvariable id="paciente" type="es.uvigo.esei.dagss.dominio.entidades.Paciente"-->
+                                    <p:column headerText="Datos paciente">
+                                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                                            <p:outputLabel value="Nombre:"/>
+                                            <p:outputLabel
+                                                    value="#{agendaControlador.citaActual.paciente.apellidos}, #{paciente.nombre}"/>
 
-                        <p:outputLabel value="DNI:"/>
-                        <p:outputLabel value="#{agendaControlador.citaActual.paciente.dni}"/>
+                                            <p:outputLabel value="DNI:"/>
+                                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.dni}"/>
 
-                        <p:outputLabel value="N. Seg. Social:"/>
-                        <p:outputLabel value="#{agendaControlador.citaActual.paciente.numeroSeguridadSocial}"/>
+                                            <p:outputLabel value="N. Seg. Social:"/>
+                                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.numeroSeguridadSocial}"/>
 
-                        <p:outputLabel value="Tarjeta Sanitaria:"/>
-                        <p:outputLabel value="#{agendaControlador.citaActual.paciente.numeroTarjetaSanitaria}"/>
-                    </p:panelGrid>
-                </p:column>
+                                            <p:outputLabel value="Tarjeta Sanitaria:"/>
+                                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.numeroTarjetaSanitaria}"/>
+                                        </p:panelGrid>
+                                    </p:column>
 
-                <p:column headerText="Contacto">
-                    <p:panelGrid columns="2" styleClass="ui-noborder">
-                        <p:outputLabel value="Domicilio:"/>
-                        <p:outputLabel
-                                value="#{agendaControlador.citaActual.paciente.direccion.domicilio}. #{paciente.direccion.localidad} (#{paciente.direccion.provincia})"/>
+                                    <p:column headerText="Contacto">
+                                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                                            <p:outputLabel value="Domicilio:"/>
+                                            <p:outputLabel
+                                                    value="#{agendaControlador.citaActual.paciente.direccion.domicilio}. #{paciente.direccion.localidad} (#{paciente.direccion.provincia})"/>
 
-                        <p:outputLabel value="Teléfono:"/>
-                        <p:outputLabel value="#{agendaControlador.citaActual.paciente.telefono}"/>
+                                            <p:outputLabel value="Teléfono:"/>
+                                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.telefono}"/>
 
-                        <p:outputLabel value="e-mail:"/>
-                        <p:outputLabel value="#{agendaControlador.citaActual.paciente.email}"/>
-                    </p:panelGrid>
-                </p:column>
+                                            <p:outputLabel value="e-mail:"/>
+                                            <p:outputLabel value="#{agendaControlador.citaActual.paciente.email}"/>
+                                        </p:panelGrid>
+                                    </p:column>
 
-                <f:facet name="footer">
-                    <p:commandButton id="botonFinCita" icon="ui-icon-pencil" value="Cita Completada"
-                                     action="#{medicoControlador.finalizarCitaCompletada(agendaControlador.citaActual)}"/>
-                    <p:commandButton id="botonFinCitaAusente" icon="ui-icon-pencil" value="Paciente Ausente"
-                                     action="#{medicoControlador.finalizarCitaPacienteAusente(agendaControlador.citaActual)}"/>
-                </f:facet>
+                                    <f:facet name="footer">
+                                        <div class="btn-group">
+                                            <b:commandButton id="botonFinCita" styleClass="btn-success" iconAwesome="fa-check"
+                                                             value="Cita Completada"
+                                                             action="#{medicoControlador.finalizarCitaCompletada(agendaControlador.citaActual)}"/>
+                                            <b:commandButton id="botonFinCitaAusente" styleClass="btn-danger" iconAwesome="fa-times"
+                                                             value="Paciente Ausente"
+                                                             action="#{medicoControlador.finalizarCitaPacienteAusente(agendaControlador.citaActual)}"/>
+                                        </div>
+                                    </f:facet>
 
-            </p:dataTable>
-        </h:form>
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Citas anteriores">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <h:form id="formularioListado2" styleClass="form">
+                                <!--@elvariable id="cita" type="es.uvigo.esei.dagss.dominio.entidades.Cita"-->
+                                <p:dataTable id="tablaListado2" styleClass="table table-responsive"
+                                             value="#{medicoControlador.citasAnteriores}"
+                                             var="cita"
+                                             selectionMode="single"
+                                             paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{cita.id}">
 
-        <h:form id="formularioListado2">
-            <!--@elvariable id="cita" type="es.uvigo.esei.dagss.dominio.entidades.Cita"-->
-            <p:dataTable id="tablaListado2"
-                         value="#{medicoControlador.citasAnteriores}"
-                         var="cita"
-                         selectionMode="single"
-                         paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{cita.id}">
+                                    <p:column headerText="Fecha">
+                                        <p:outputLabel value="#{cita.fecha}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </p:outputLabel>
+                                    </p:column>
 
+                                    <p:column headerText="Estado">
+                                        <p:outputLabel value="#{cita.estado}"/>
+                                    </p:column>
 
-                <f:facet name="header">
-                    <h:outputText value="Citas anteriores"/>
-                </f:facet>
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab id="tabTratamientos" title="Tratamientos">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <h:form id="formularioListadoo" styleClass="form">
+                                <!--@elvariable id="tratamiento" type="es.uvigo.esei.dagss.dominio.entidades.Tratamiento"-->
+                                <p:dataTable id="tablaListadoo" styleClass="table table-responsive"
+                                             value="#{medicoControlador.tratamientos}"
+                                             var="tratamiento"
+                                             selectionMode="single"
+                                             selection="#{medicoControlador.tratamientoActual}"
+                                             paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{tratamiento.id}">
+                                    <p:ajax event="rowSelect" update="botonNuevo botonVer botonEditar botonBorrar "/>
 
-                <p:column headerText="Fecha">
-                    <p:outputLabel value="#{cita.fecha}">
-                        <f:convertDateTime pattern="dd/MM/yyyy"/>
-                    </p:outputLabel>
-                </p:column>
+                                    <p:column headerText="Descripción">
+                                        <p:outputLabel value="#{tratamiento.descripcion}"/>
+                                    </p:column>
 
-                <p:column headerText="Estado">
-                    <p:outputLabel value="#{cita.estado}"/>
-                </p:column>
+                                    <p:column headerText="Fecha">
+                                        <p:outputLabel value="#{tratamiento.fecha}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </p:outputLabel>
+                                    </p:column>
 
-            </p:dataTable>
-        </h:form>
-        <h:form id="formularioListadoo">
-            <!--@elvariable id="tratamiento" type="es.uvigo.esei.dagss.dominio.entidades.Tratamiento"-->
-            <p:dataTable id="tablaListadoo"
-                         value="#{medicoControlador.tratamientos}"
-                         var="tratamiento"
-                         selectionMode="single"
-                         selection="#{medicoControlador.tratamientoActual}"
-                         paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{tratamiento.id}">
+                                    <f:facet name="footer">
+                                        <div class="btn-group">
+                                            <b:commandButton styleClass="btn-success" id="botonNuevo" iconAwesome="fa-plus"
+                                                             value="Nuevo"
+                                                             actionListener="#{medicoControlador.doNewTratamiento()}"
+                                                             update=":formularioNuevo"
+                                                             oncomplete="PF('DialogoNuevo').show()"/>
+                                            <b:commandButton styleClass="btn-primary" id="botonVer" iconAwesome="fa-search"
+                                                             value="Ver"
+                                                             disabled="#{empty medicoControlador.tratamientoActual}"
+                                                             update=":formularioVer"
+                                                             oncomplete="PF('DialogoVer').show()"/>
+                                            <b:commandButton styleClass="btn-warning" id="botonEditar" iconAwesome="fa-pencil"
+                                                             value="Editar"
+                                                             disabled="#{empty medicoControlador.tratamientoActual}"
+                                                             actionListener="#{medicoControlador.doNewPrescripcion()}"
+                                                             update=":formularioEditar"
+                                                             oncomplete="PF('DialogoEditar').show()"/>
+                                            <b:commandButton styleClass="btn-danger" id="botonBorrar" iconAwesome="fa-trash"
+                                                             value="Borrar"
+                                                             actionListener="#{medicoControlador.doDeleteTratamiento(medicoControlador.tratamientoActual)}"
+                                                             update="tablaListadoo"
+                                                             disabled="#{medicoControlador.tratamientoActual == null}"/>
+                                        </div>
 
-                <p:ajax event="rowSelect" update="botonNuevo botonVer botonEditar botonBorrar "/>
+                                    </f:facet>
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:accordionPanel>
 
-                <f:facet name="header">
-                    <h:outputText value="Tratamientos"/>
-                </f:facet>
+                <ui:include src="fragmentoDialogoVer.xhtml"/>
+                <ui:include src="fragmentoDialogoEditar.xhtml"/>
+                <ui:include src="fragmentoDialogoNuevo.xhtml"/>
 
-                <p:column headerText="Descripción">
-                    <p:outputLabel value="#{tratamiento.descripcion}"/>
-                </p:column>
+            </div>
+        </div>
 
-                <p:column headerText="Fecha">
-                    <p:outputLabel value="#{tratamiento.fecha}">
-                        <f:convertDateTime pattern="dd/MM/yyyy"/>
-                    </p:outputLabel>
-                </p:column>
-
-                <f:facet name="footer">
-                    <p:commandButton id="botonNuevo" icon="ui-icon-plus" value="Nuevo"
-                                     actionListener="#{medicoControlador.doNewTratamiento()}"
-                                     update=":formularioNuevo"
-                                     oncomplete="PF('DialogoNuevo').show()"/>
-                    <p:commandButton id="botonVer" icon="ui-icon-search" value="Ver"
-                                     disabled="#{empty medicoControlador.tratamientoActual}"
-                                     update=":formularioVer"
-                                     oncomplete="PF('DialogoVer').show()"/>
-                    <p:commandButton id="botonEditar" icon="ui-icon-search" value="Editar"
-                                     disabled="#{empty medicoControlador.tratamientoActual}"
-                                     actionListener="#{medicoControlador.doNewPrescripcion()}"
-                                     update=":formularioEditar"
-                                     oncomplete="PF('DialogoEditar').show()"/>
-                    <p:commandButton id="botonBorrar" icon="ui-icon-trash" value="Borrar"
-                                     actionListener="#{medicoControlador.doDeleteTratamiento(medicoControlador.tratamientoActual)}"
-                                     update="tablaListadoo"
-                                     disabled="#{medicoControlador.tratamientoActual == null}"/>
-                </f:facet>
-            </p:dataTable>
-        </h:form>
-        <ui:include src="fragmentoDialogoVer.xhtml"/>
-        <ui:include src="fragmentoDialogoEditar.xhtml"/>
-        <ui:include src="fragmentoDialogoNuevo.xhtml"/>
     </ui:define>
 </ui:composition>
 </body>
