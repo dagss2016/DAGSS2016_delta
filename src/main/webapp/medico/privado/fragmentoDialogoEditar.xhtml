@@ -55,6 +55,7 @@
                                 <div class="btn-group">
                                     <b:commandButton id="botonGuardar" styleClass="btn-success"
                                                      iconAwesome="fa-floppy-o" value="Guardar"
+                                                     onclick="PF('DialogoEditar').hide()"
                                                      actionListener="#{medicoControlador.doActualizarTratamiento(agendaControlador.citaActual.paciente)}"
                                                      disabled="#{empty medicoControlador.prescripcionActual}"
                                                      update=":formularioEditar:tablaListadoEditar,:formularioEditarPrescripcion"/>
@@ -83,7 +84,7 @@
                                     <f:selectItem itemLabel="Select One" itemValue="" />
                                     <f:selectItems var="medicamento" value="#{medicoControlador.todosMedicamentos()}"
                                                    itemValue="#{medicamento}"
-                                                   itemLabel="#{medicamento.nombre}" noSelectionValue="true"/>
+                                                   itemLabel="#{medicamento.nombre}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="dosis" value="Dosis"/>
@@ -120,12 +121,12 @@
                             <b:commandButton id="botonActualizar" styleClass="btn-primary" iconAwesome="fa-refresh" value="Actualizar"
                                              actionListener="#{medicoControlador.doEditTratamiento()}"
                                              disabled="#{medicoControlador.prescripcionActual.id == null}"
-                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion"/>
+                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
 
                             <b:commandButton id="botonEliminar" styleClass="btn-danger" iconAwesome="fa-times" value="Eliminar"
                                              actionListener="#{medicoControlador.doDeletePrescripcion()}"
                                              disabled="#{medicoControlador.prescripcionActual.id == null}"
-                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion"/>
+                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
 
                             <b:commandButton id="botonNuevo" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
                                              actionListener="#{medicoControlador.doGuardarPrescripcion(agendaControlador.citaActual.paciente)}"
