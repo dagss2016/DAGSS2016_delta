@@ -1,143 +1,147 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui">
-    <ui:composition>
-        <p:dialog id="dialogoEditar" widgetVar="DialogoEditar" modal="true" resizable="false"
-                  appendTo="@(body)" header="Editar Tratamiento">
+<ui:composition>
+    <p:dialog id="dialogoEditar" widgetVar="DialogoEditar" modal="true" resizable="false"
+              appendTo="@(body)" header="Editar Tratamiento">
 
-            <div class="container-fluid">
-                <div class="col-sm-9">
-                    <h:form id="formularioEditar">
-                        <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
-                        <p:dataTable id="tablaListadoEditar"
-                                     value="#{medicoControlador.tratamientoActual.prescripciones}"
-                                     var="prescripcion"
-                                     selectionMode="single"
-                                     selection="#{medicoControlador.prescripcionActual}"
-                                     paginator="true" paginatorPosition="bottom" rows="6" rowKey="#{prescripcion.id}">
+        <div class="container-fluid">
+            <div class="col-sm-9">
+                <h:form id="formularioEditar">
+                    <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
+                    <p:dataTable id="tablaListadoEditar"
+                                 value="#{medicoControlador.tratamientoActual.prescripciones}"
+                                 var="prescripcion"
+                                 selectionMode="single"
+                                 selection="#{medicoControlador.prescripcionActual}"
+                                 paginator="true" paginatorPosition="bottom" rows="6" rowKey="#{prescripcion.id}">
 
-                            <p:ajax event="rowSelect" update=" :formularioEditarPrescripcion :formularioEditarPrescripcion:botonActualizar "/>
+                        <p:ajax event="rowSelect"
+                                update=" :formularioEditarPrescripcion "/>
 
-                            <f:facet name="header">
-                                <h:outputText value="Listado de Prescripciones"/>
-                            </f:facet>
+                        <f:facet name="header">
+                            <h:outputText value="Listado de Prescripciones"/>
+                        </f:facet>
 
-                            <p:column headerText="Medicamento">
-                                <p:outputLabel value="#{prescripcion.medicamento.nombre}" />
-                            </p:column>
+                        <p:column headerText="Medicamento">
+                            <p:outputLabel value="#{prescripcion.medicamento.nombre}"/>
+                        </p:column>
 
-                            <p:column headerText="Dosis">
-                                <p:outputLabel value="#{prescripcion.dosis}" />
-                            </p:column>
+                        <p:column headerText="Dosis">
+                            <p:outputLabel value="#{prescripcion.dosis}"/>
+                        </p:column>
 
-                            <p:column headerText="Indicaciones">
-                                <p:outputLabel value="#{prescripcion.indicaciones}" />
-                            </p:column>
+                        <p:column headerText="Indicaciones">
+                            <p:outputLabel value="#{prescripcion.indicaciones}"/>
+                        </p:column>
 
-                            <p:column headerText="Fecha Inicio">
-                                <p:outputLabel value="#{prescripcion.fechaInicio}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                </p:outputLabel>
-                            </p:column>
+                        <p:column headerText="Fecha Inicio">
+                            <p:outputLabel value="#{prescripcion.fechaInicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
 
-                            <p:column headerText="Fecha Fin">
-                                <p:outputLabel value="#{prescripcion.fechaFin}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                </p:outputLabel>
-                            </p:column>
+                        <p:column headerText="Fecha Fin">
+                            <p:outputLabel value="#{prescripcion.fechaFin}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
 
-                            <f:facet name="footer">
+                        <f:facet name="footer">
 
-                                <div class="btn-group">
-                                    <b:commandButton id="botonGuardar" styleClass="btn-success"
-                                                     iconAwesome="fa-floppy-o" value="Guardar"
-                                                     onclick="PF('DialogoEditar').hide()"
-                                                     actionListener="#{medicoControlador.doActualizarTratamiento(agendaControlador.citaActual.paciente)}"
-                                                     disabled="#{empty medicoControlador.prescripcionActual}"
-                                                     update=":formularioEditar:tablaListadoEditar,:formularioEditarPrescripcion"/>
+                            <div class="btn-group">
+                                <b:commandButton id="botonGuardarEditar" styleClass="btn-success"
+                                                 iconAwesome="fa-floppy-o" value="Guardar"
+                                                 onclick="PF('DialogoEditar').hide()"
+                                                 actionListener="#{medicoControlador.doActualizarTratamiento(agendaControlador.citaActual.paciente)}"
+                                                 disabled="#{empty medicoControlador.prescripcionActual}"
+                                                 update=":formularioEditar:tablaListadoEditar,:formularioEditarPrescripcion"/>
 
-                                    <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
-                                                     onclick="PF('DialogoEditar').hide()"
-                                                     actionListener="#{medicoControlador.clear}"/>
-                                </div>
-                            </f:facet>
+                                <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
+                                                 onclick="PF('DialogoEditar').hide()"
+                                                 actionListener="#{medicoControlador.clear}"/>
+                            </div>
+                        </f:facet>
 
-                        </p:dataTable>
-                    </h:form>
-                </div>
-
-                <div class="col-sm-3">
-                    <h:form id="formularioEditarPrescripcion" >
-
-                        <div class="form-group">
-
-                            <h3 class="text-center"><p:outputLabel value="Datos prescripcion"/></h3>
-                            <p:panelGrid columns="2" styleClass="ui-noborder">
-                                <p:outputLabel value="Medicamento" for="medicamento"/>
-                                <p:selectOneMenu id="medicamento" value="#{medicoControlador.prescripcionActual.medicamento}"
-                                                 converter="omnifaces.SelectItemsConverter" styleClass="ui-column-p-6" required="true" for="medicamento">
-                                    <!--<f:selectItem itemValue="&nbsp;"/>-->
-                                    <f:selectItem itemLabel="Select One" itemValue="" />
-                                    <f:selectItems var="medicamento" value="#{medicoControlador.todosMedicamentos()}"
-                                                   itemValue="#{medicamento}"
-                                                   itemLabel="#{medicamento.nombre}"/>
-                                </p:selectOneMenu>
-
-                                <p:outputLabel for="dosis" value="Dosis"/>
-                                <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}" required="true"/>
-
-                                <p:outputLabel value="Indicaciones" for="indicaciones"/>
-                                <p:inputText id="indicaciones" value="#{medicoControlador.prescripcionActual.indicaciones}" required="true"/>
-
-                                <p:outputLabel value="Fecha Inicio" for="fechaInicio"/>
-                                <p:calendar id="fechaInicio" pattern="dd-MM-yyyy"
-                                            value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold" required="true"/>
-
-                                <p:outputLabel value="Fecha Fin" for="fechaFin"/>
-                                <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
-                                            value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold" required="true"/>
-
-                            </p:panelGrid>
-                        </div>
-
-                        <!--
-
-                        <p:outputLabel value="Min Length (3):" for="medicament" />
-                        <p:autoComplete id="medicament" minQueryLength="1"
-                                         value="#{medicoControlador.prescripcionActual.medicamento}"
-                                         completeMethod="#{medicoControlador.todosMedicamentos()}"
-                                         var="m"
-                                         itemLabel="#{m.nombre}"
-                                         itemValue="#{m}"
-                                         effect="fade" />
-                         -->
-
-                        <div class="btn-group">
-
-                            <b:commandButton id="botonActualizar" styleClass="btn-primary" iconAwesome="fa-refresh" value="Actualizar"
-                                             actionListener="#{medicoControlador.doEditTratamiento()}"
-                                             disabled="#{medicoControlador.prescripcionActual.id == null}"
-                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
-
-                            <b:commandButton id="botonEliminar" styleClass="btn-danger" iconAwesome="fa-times" value="Eliminar"
-                                             actionListener="#{medicoControlador.doDeletePrescripcion()}"
-                                             disabled="#{medicoControlador.prescripcionActual.id == null}"
-                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
-
-                            <b:commandButton id="botonNuevo" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
-                                             actionListener="#{medicoControlador.doGuardarPrescripcion(agendaControlador.citaActual.paciente)}"
-                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
-
-                        </div>
-
-                    </h:form>
-                </div>
+                    </p:dataTable>
+                </h:form>
             </div>
 
-        </p:dialog>
-    </ui:composition>
+            <div class="col-sm-3">
+                <h:form id="formularioEditarPrescripcion">
+
+                    <div class="form-group">
+
+                        <h3 class="text-center"><p:outputLabel value="Datos prescripcion"/></h3>
+                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                            <p:outputLabel value="Medicamento" for="medicamento"/>
+                            <p:selectOneMenu id="medicamento"
+                                             value="#{medicoControlador.prescripcionActual.medicamento}"
+                                             converter="omnifaces.SelectItemsConverter" styleClass="ui-column-p-6"
+                                             required="true" for="medicamento">
+                                <!--<f:selectItem itemValue="&nbsp;"/>-->
+                                <f:selectItem itemLabel="Select One" itemValue=""/>
+                                <f:selectItems var="medicamento" value="#{medicoControlador.todosMedicamentos()}"
+                                               itemValue="#{medicamento}"
+                                               itemLabel="#{medicamento.nombre}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="dosis" value="Dosis"/>
+                            <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}"
+                                         required="true"/>
+
+                            <p:outputLabel value="Indicaciones" for="indicaciones"/>
+                            <p:inputText id="indicaciones" value="#{medicoControlador.prescripcionActual.indicaciones}"
+                                         required="true"/>
+
+                            <p:outputLabel value="Fecha Inicio" for="fechaInicio"/>
+                            <p:calendar id="fechaInicio" pattern="dd-MM-yyyy"
+                                        value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold"
+                                        required="true"/>
+
+                            <p:outputLabel value="Fecha Fin" for="fechaFin"/>
+                            <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
+                                        value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold"
+                                        required="true"/>
+
+                        </p:panelGrid>
+                    </div>
+
+                    <!--
+
+                    <p:outputLabel value="Min Length (3):" for="medicament" />
+                    <p:autoComplete id="medicament" minQueryLength="1"
+                                     value="#{medicoControlador.prescripcionActual.medicamento}"
+                                     completeMethod="#{medicoControlador.todosMedicamentos()}"
+                                     var="m"
+                                     itemLabel="#{m.nombre}"
+                                     itemValue="#{m}"
+                                     effect="fade" />
+                     -->
+
+                    <div class="btn-group">
+
+                        <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
+                                         actionListener="#{medicoControlador.doGuardarPrescripcion(agendaControlador.citaActual.paciente)}"
+                                         update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
+
+                        <b:commandButton id="botonEliminarEditar" styleClass="btn-danger" iconAwesome="fa-times"
+                                         value="Eliminar"
+                                         actionListener="#{medicoControlador.doDeletePrescripcion()}"
+                                         disabled="#{medicoControlador.prescripcionActual.id == null}"
+                                         update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
+
+                    </div>
+
+                </h:form>
+            </div>
+        </div>
+
+    </p:dialog>
+</ui:composition>
 </html>

@@ -18,17 +18,17 @@
                     <div class="form-group">
                         <p:panelGrid columns="2" styleClass="ui-noborder">
                             <p:outputLabel value="Descripcion del Tratamiento" for="descripcion"/>
-                            <p:inputText id="descripcion" value="#{medicoControlador.tratamientoActual.descripcion}"/>
+                            <p:inputText id="descripcion" value="#{medicoControlador.tratamientoActual.descripcion}" required="true"/>
                         </p:panelGrid>
                     </div>
 
                     <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
-                    <p:dataTable id="tablaListadoNueva"
+                    <p:dataTable id="tablaListadoNuevo"
                                  value="#{medicoControlador.prescripciones}"
                                  var="prescripcion"
                                  paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{prescripcion.id}">
 
-                        <p:ajax event="rowSelect" update=" :formularioNNPrescripcion "/>
+                        <p:ajax event="rowSelect" update=" :formularioNuevaPrescripcion "/>
 
                         <f:facet name="header">
                             <h:outputText value="Listado de Prescripciones"/>
@@ -60,16 +60,16 @@
 
                         <f:facet name="footer">
                             <div class="btn-group">
-                            <b:commandButton value="Guardar Tratamiento" styleClass="btn-success"
-                                             iconAwesome="fa-floppy-o"
-                                             actionListener="#{medicoControlador.doGuardarTratamiento(agendaControlador.citaActual.paciente)}"
-                                             disabled="#{empty medicoControlador.prescripcionActual}"
-                                             onclick="PF('DialogoNuevo').hide()"
-                                             update="@(tablaListadoo),:formularioNuevo:tablaListadoNueva,:formularioNNPrescripcion"/>
+                                <b:commandButton value="Guardar Tratamiento" styleClass="btn-success"
+                                                 iconAwesome="fa-floppy-o"
+                                                 actionListener="#{medicoControlador.doGuardarTratamiento(agendaControlador.citaActual.paciente)}"
+                                                 disabled="#{empty medicoControlador.prescripcionActual}"
+                                                 onclick="PF('DialogoNuevo').hide()"
+                                                 update="@(formularioListadoTratamientos),:formularioNuevo:tablaListadoNuevo,:formularioNuevaPrescripcion"/>
 
-                            <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
-                                             onclick="PF('DialogoNuevo').hide()"
-                                             actionListener="#{medicoControlador.clear}"/>
+                                <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
+                                                 onclick="PF('DialogoNuevo').hide()"
+                                                 actionListener="#{medicoControlador.clear}"/>
                             </div>
                         </f:facet>
                     </p:dataTable>
@@ -78,36 +78,42 @@
             </div>
 
             <div class="col-sm-3">
-                <h:form id="formularioNNPrescripcion">
+                <h:form id="formularioNuevaPrescripcion">
                     <div class="form-group">
                         <h3 class="text-center"><p:outputLabel value="Datos prescripcion"/></h3>
                         <p:panelGrid columns="2" styleClass="ui-noborder">
                             <p:outputLabel value="Medicamento" for="medicamento"/>
-                            <p:selectOneMenu id="medicamento" value="#{medicoControlador.prescripcionActual.medicamento}"
+                            <p:selectOneMenu id="medicamento"
+                                             value="#{medicoControlador.prescripcionActual.medicamento}"
                                              converter="omnifaces.SelectItemsConverter" required="true">
-                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItem itemLabel="Select One" itemValue=""/>
                                 <f:selectItems var="medicamento" value="#{medicoControlador.todosMedicamentos()}"
                                                itemValue="#{medicamento}"
                                                itemLabel="#{medicamento.nombre}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="Dosis" for="dosis"/>
-                            <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}" required="true"/>
+                            <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}"
+                                         required="true"/>
 
                             <p:outputLabel value="Indicaciones" for="indicaciones"/>
-                            <p:inputText id="indicaciones" value="#{medicoControlador.prescripcionActual.indicaciones}" required="true"/>
+                            <p:inputText id="indicaciones" value="#{medicoControlador.prescripcionActual.indicaciones}"
+                                         required="true"/>
 
                             <p:outputLabel value="Fecha Inicio" for="fechaInicio"/>
                             <p:calendar id="fechaInicio" pattern="dd-MM-yyyy"
-                                        value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold" required="true"/>
+                                        value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold"
+                                        required="true"/>
 
                             <p:outputLabel value="Fecha Fin" for="fechaFin"/>
                             <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
-                                        value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold" required="true"/>
+                                        value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold"
+                                        required="true"/>
 
                             <div class="btn-group">
-                                <b:commandButton id="botonNuevo" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
-                                             actionListener="#{medicoControlador.doGuardarrPrescripcion(agendaControlador.citaActual.paciente)}"
-                                             update="@(tablaListadoNueva),:formularioNNPrescripcion, formularioNuevo"/>
+                                <b:commandButton id="botonNuevaNuevo" styleClass="btn-success" iconAwesome="fa-plus"
+                                                 value="Nueva"
+                                                 actionListener="#{medicoControlador.doGuardarrPrescripcion(agendaControlador.citaActual.paciente)}"
+                                                 update="@(tablaListadoNueva),:formularioNuevaPrescripcion, formularioNuevo"/>
 
                             </div>
                         </p:panelGrid>

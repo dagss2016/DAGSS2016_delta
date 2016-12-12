@@ -28,7 +28,7 @@
                 <p:accordionPanel multiple="true">
                     <p:tab title="Información del paciente">
                         <h:panelGrid columns="2" cellpadding="10">
-                            <h:form id="formularioListado" styleClass="form">
+                            <h:form id="formularioInfoPaciente" styleClass="form">
                                 <p:dataTable id="tablaListado" value="#{agendaControlador.citaActual}"
                                              styleClass="table table-responsive">
 
@@ -83,7 +83,7 @@
                     </p:tab>
                     <p:tab title="Citas anteriores">
                         <h:panelGrid columns="2" cellpadding="10">
-                            <h:form id="formularioListado2" styleClass="form">
+                            <h:form id="formularioListadoCitasAnteriores" styleClass="form">
                                 <!--@elvariable id="cita" type="es.uvigo.esei.dagss.dominio.entidades.Cita"-->
                                 <p:dataTable id="tablaListado2" styleClass="table table-responsive"
                                              value="#{medicoControlador.citasAnteriores}"
@@ -107,9 +107,9 @@
                     </p:tab>
                     <p:tab id="tabTratamientos" title="Tratamientos">
                         <h:panelGrid columns="2" cellpadding="10">
-                            <h:form id="formularioListadoo" styleClass="form">
+                            <h:form id="formularioListadoTratamientos" styleClass="form">
                                 <!--@elvariable id="tratamiento" type="es.uvigo.esei.dagss.dominio.entidades.Tratamiento"-->
-                                <p:dataTable id="tablaListadoo" styleClass="table table-responsive"
+                                <p:dataTable id="tablaListadoTratamientos" styleClass="table table-responsive"
                                              value="#{medicoControlador.tratamientos}"
                                              var="tratamiento"
                                              selectionMode="single"
@@ -148,7 +148,7 @@
                                             <b:commandButton styleClass="btn-danger" id="botonBorrar" iconAwesome="fa-trash"
                                                              value="Borrar"
                                                              actionListener="#{medicoControlador.doDeleteTratamiento(medicoControlador.tratamientoActual)}"
-                                                             update="tablaListadoo"
+                                                             update="tablaListadoTratamientos"
                                                              disabled="#{medicoControlador.tratamientoActual == null}"/>
                                         </div>
 
