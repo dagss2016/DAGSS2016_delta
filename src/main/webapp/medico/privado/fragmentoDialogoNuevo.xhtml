@@ -79,11 +79,11 @@
 
             <div class="col-sm-3">
                 <h:form id="formularioNuevaPrescripcion">
+                    <!--@elvariable id="m" type="es.uvigo.esei.dagss.dominio.entidades.Medicamento"-->
                     <div class="form-group">
                         <h3 class="text-center"><p:outputLabel value="Datos prescripcion"/></h3>
                         <p:panelGrid columns="2" styleClass="ui-noborder">
                             <p:outputLabel value="Medicamento" for="medicamento"/>
-                            <!--@elvariable id="m" type="es.uvigo.esei.dagss.dominio.entidades.Medicamento"-->
                             <p:autoComplete id="medicamento" minQueryLength="3"
                                             value="#{medicoControlador.prescripcionActual.medicamento}"
                                             completeMethod="#{medicoControlador.completeMedicamentos}"
@@ -92,8 +92,8 @@
                                             itemValue="#{m}"
                                             itemLabel="#{m.nombre}"
                                             converter="entityConverter"
-                                            effect="fade" >
-                            </p:autoComplete>
+                                            effect="fade"
+                                            required="true"/>
                             <p:outputLabel value="Dosis" for="dosis"/>
                             <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}"
                                          required="true"/>

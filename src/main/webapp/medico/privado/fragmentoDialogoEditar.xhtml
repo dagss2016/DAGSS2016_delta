@@ -74,13 +74,13 @@
 
             <div class="col-sm-3">
                 <h:form id="formularioEditarPrescripcion">
-                    <div class="form-group">
 
+                        <div class="form-group">
+                        <!--@elvariable id="m" type="es.uvigo.esei.dagss.dominio.entidades.Medicamento"-->
                         <h3 class="text-center"><p:outputLabel value="Datos prescripcion"/></h3>
-                        <p:panelGrid columns="2" styleClass="ui-noborder">
+                        <p:panelGrid columns="2" styleClass="ui-noborder" cellpadding="5">
 
-                            <p:outputLabel value="Medicamento" for="medicamento" />
-                            <!--@elvariable id="m" type="es.uvigo.esei.dagss.dominio.entidades.Medicamento"-->
+                            <p:outputLabel for="medicamento" value="Medicamento"/>
                             <p:autoComplete id="medicamento" minQueryLength="3"
                                             value="#{medicoControlador.prescripcionActual.medicamento}"
                                             completeMethod="#{medicoControlador.completeMedicamentos}"
@@ -89,8 +89,8 @@
                                             itemValue="#{m}"
                                             itemLabel="#{m.nombre}"
                                             converter="entityConverter"
-                                            effect="fade" >
-                            </p:autoComplete>
+                                            effect="fade"
+                                            required="true"/>
 
                             <p:outputLabel for="dosis" value="Dosis"/>
                             <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}"
@@ -112,20 +112,17 @@
 
                         </p:panelGrid>
                     </div>
+                            <div class="btn-group" >
+                                    <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
+                                                     actionListener="#{medicoControlador.doGuardarPrescripcion(agendaControlador.citaActual.paciente)}"
+                                                     update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
 
-                    <div class="btn-group">
-
-                        <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
-                                         actionListener="#{medicoControlador.doGuardarPrescripcion(agendaControlador.citaActual.paciente)}"
-                                         update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
-
-                        <b:commandButton id="botonEliminarEditar" styleClass="btn-danger" iconAwesome="fa-times"
-                                         value="Eliminar"
-                                         actionListener="#{medicoControlador.doDeletePrescripcion()}"
-                                         disabled="#{medicoControlador.prescripcionActual.id == null}"
-                                         update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
-
-                    </div>
+                                    <b:commandButton id="botonEliminarEditar" styleClass="btn-danger" iconAwesome="fa-times"
+                                                     value="Eliminar"
+                                                     actionListener="#{medicoControlador.doDeletePrescripcion()}"
+                                                     disabled="#{medicoControlador.prescripcionActual.id == null}"
+                                                     update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
+                            </div>
                 </h:form>
             </div>
 
