@@ -74,22 +74,23 @@
 
             <div class="col-sm-3">
                 <h:form id="formularioEditarPrescripcion">
-
                     <div class="form-group">
 
                         <h3 class="text-center"><p:outputLabel value="Datos prescripcion"/></h3>
                         <p:panelGrid columns="2" styleClass="ui-noborder">
-                            <p:outputLabel value="Medicamento" for="medicamento"/>
-                            <p:selectOneMenu id="medicamento"
-                                             value="#{medicoControlador.prescripcionActual.medicamento}"
-                                             converter="omnifaces.SelectItemsConverter" styleClass="ui-column-p-6"
-                                             required="true" for="medicamento">
-                                <!--<f:selectItem itemValue="&nbsp;"/>-->
-                                <f:selectItem itemLabel="Select One" itemValue=""/>
-                                <f:selectItems var="medicamento" value="#{medicoControlador.todosMedicamentos()}"
-                                               itemValue="#{medicamento}"
-                                               itemLabel="#{medicamento.nombre}"/>
-                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Medicamento" for="medicamento" />
+                            <!--@elvariable id="m" type="es.uvigo.esei.dagss.dominio.entidades.Medicamento"-->
+                            <p:autoComplete id="medicamento" minQueryLength="3"
+                                            value="#{medicoControlador.prescripcionActual.medicamento}"
+                                            completeMethod="#{medicoControlador.completeMedicamentos}"
+                                            var="m"
+                                            forceSelection="true"
+                                            itemValue="#{m}"
+                                            itemLabel="#{m.nombre}"
+                                            converter="entityConverter"
+                                            effect="fade" >
+                            </p:autoComplete>
 
                             <p:outputLabel for="dosis" value="Dosis"/>
                             <p:inputText id="dosis" value="#{medicoControlador.prescripcionActual.dosis}"
@@ -112,18 +113,6 @@
                         </p:panelGrid>
                     </div>
 
-                    <!--
-
-                    <p:outputLabel value="Min Length (3):" for="medicament" />
-                    <p:autoComplete id="medicament" minQueryLength="1"
-                                     value="#{medicoControlador.prescripcionActual.medicamento}"
-                                     completeMethod="#{medicoControlador.todosMedicamentos()}"
-                                     var="m"
-                                     itemLabel="#{m.nombre}"
-                                     itemValue="#{m}"
-                                     effect="fade" />
-                     -->
-
                     <div class="btn-group">
 
                         <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
@@ -137,9 +126,9 @@
                                          update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
 
                     </div>
-
                 </h:form>
             </div>
+
         </div>
 
     </p:dialog>
