@@ -231,16 +231,6 @@ public class MedicoControlador implements Serializable {
     }
 
     public void doNuevaPrescripcion(Paciente paciente) {
-        prescripcionActual.setMedico(medicoActual);
-        prescripcionActual.setTratamiento(tratamientoActual);
-        prescripcionActual.setPaciente(paciente);
-        prescripcionDAO.crear(prescripcionActual);
-        tratamientoActual.getPrescripciones().add(prescripcionActual);
-        tratamientoDAO.actualizar(tratamientoActual);
-        limpiarPrescripcionActual();
-    }
-
-    public void doGuardarPrescripcion(Paciente paciente) {
         if (tratamientoActual.getId() == null) {
             tratamientoActual.setFecha(Calendar.getInstance().getTime());
             tratamientoActual.setPaciente(paciente);
@@ -251,7 +241,8 @@ public class MedicoControlador implements Serializable {
         prescripcionActual.setTratamiento(tratamientoActual);
         prescripcionActual.setPaciente(paciente);
         prescripcionDAO.crear(prescripcionActual);
-        prescripciones.add(prescripcionActual);
+        tratamientoActual.getPrescripciones().add(prescripcionActual);
+        tratamientoDAO.actualizar(tratamientoActual);
         prescripciones = prescripcionDAO.buscarPorIdPacienteAndIdTratamiento(paciente.getId(), tratamientoActual.getId());
         limpiarPrescripcionActual();
     }
