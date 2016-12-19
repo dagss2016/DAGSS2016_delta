@@ -83,7 +83,7 @@
                             <p:outputLabel for="medicamento" value="Medicamento"/>
                             <p:autoComplete id="medicamento" minQueryLength="3"
                                             value="#{medicoControlador.prescripcionActual.medicamento}"
-                                            completeMethod="#{medicoControlador.completeMedicamentos}"
+                                            completeMethod="#{medicoControlador.doBuscarMedicamentosPorCadena}"
                                             var="m"
                                             forceSelection="true"
                                             itemValue="#{m}"
@@ -102,27 +102,26 @@
 
                             <p:outputLabel value="Fecha Inicio" for="fechaInicio"/>
                             <p:calendar id="fechaInicio" pattern="dd-MM-yyyy"
-                                        value="#{medicoControlador.prescripcionActual.fechaInicio}" effect="fold"
-                                        required="true"/>
+                                        value="#{medicoControlador.prescripcionActual.fechaInicio}" required="true"/>
 
                             <p:outputLabel value="Fecha Fin" for="fechaFin"/>
                             <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
-                                        value="#{medicoControlador.prescripcionActual.fechaFin}" effect="fold"
-                                        required="true"/>
+                                        value="#{medicoControlador.prescripcionActual.fechaFin}" required="true"/>
 
                         </p:panelGrid>
-                    </div>
-                            <div class="btn-group" >
-                                    <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
-                                                     actionListener="#{medicoControlador.doGuardarPrescripcion(agendaControlador.citaActual.paciente)}"
-                                                     update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
 
-                                    <b:commandButton id="botonEliminarEditar" styleClass="btn-danger" iconAwesome="fa-times"
-                                                     value="Eliminar"
-                                                     actionListener="#{medicoControlador.doDeletePrescripcion()}"
-                                                     disabled="#{medicoControlador.prescripcionActual.id == null}"
-                                                     update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
-                            </div>
+                        <div class="btn-group" >
+                            <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
+                                             actionListener="#{medicoControlador.doNuevaPrescripcion(agendaControlador.citaActual.paciente)}"
+                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
+
+                            <b:commandButton id="botonEliminarEditar" styleClass="btn-danger" iconAwesome="fa-times"
+                                             value="Eliminar"
+                                             actionListener="#{medicoControlador.doBorrarPrescripcion()}"
+                                             disabled="#{medicoControlador.prescripcionActual.id == null}"
+                                             update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
+                        </div>
+                    </div>
                 </h:form>
             </div>
 

@@ -131,7 +131,7 @@
                                         <div class="btn-group">
                                             <b:commandButton styleClass="btn-success" id="botonNuevo" iconAwesome="fa-plus"
                                                              value="Nuevo"
-                                                             actionListener="#{medicoControlador.doNewTratamiento()}"
+                                                             actionListener="#{medicoControlador.doNuevoTratamiento()}"
                                                              update=":formularioNuevo"
                                                              oncomplete="PF('DialogoNuevo').show()"/>
                                             <b:commandButton styleClass="btn-primary" id="botonVer" iconAwesome="fa-search"
@@ -142,12 +142,12 @@
                                             <b:commandButton styleClass="btn-warning" id="botonEditar" iconAwesome="fa-pencil"
                                                              value="Editar"
                                                              disabled="#{empty medicoControlador.tratamientoActual}"
-                                                             actionListener="#{medicoControlador.doNewPrescripcion()}"
+                                                             actionListener="#{medicoControlador.doEditarTratamiento()}"
                                                              update=":formularioEditar"
                                                              oncomplete="PF('DialogoEditar').show()"/>
                                             <b:commandButton styleClass="btn-danger" id="botonBorrar" iconAwesome="fa-trash"
                                                              value="Borrar"
-                                                             actionListener="#{medicoControlador.doDeleteTratamiento(medicoControlador.tratamientoActual)}"
+                                                             actionListener="#{medicoControlador.doBorrarTratamiento}"
                                                              update="tablaListadoTratamientos"
                                                              disabled="#{medicoControlador.tratamientoActual == null}"/>
                                         </div>

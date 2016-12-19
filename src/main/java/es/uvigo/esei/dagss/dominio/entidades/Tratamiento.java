@@ -93,7 +93,7 @@ public class Tratamiento {
         if (obj == null) { return false; }
         if (getClass() != obj.getClass()) { return false; }
 
-        final Prescripcion other = (Prescripcion) obj;
+        final Tratamiento other = (Tratamiento) obj;
         return Objects.equals(this.id, other.id);
     }
 }

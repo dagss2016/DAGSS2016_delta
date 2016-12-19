@@ -34,19 +34,23 @@ public class PrescripcionService implements Serializable {
     }
 
     private void generarReceta(Prescripcion p) {
-        long diff = p.getFechaFin().getTime() - p.getFechaInicio().getTime();
-        int diasTotales = (int) Math.ceil(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
-        double b = ((double) p.getDosis() * diasTotales) / p.getMedicamento().getNumeroDosis();
-        int numRecetas = (int) Math.ceil(b);
-        int duracion = (int) Math.floor((p.getMedicamento().getNumeroDosis() / p.getDosis()));
-        for (int i = 0; i < numRecetas; i++) {
-            Receta r = new Receta();
-            r.setCantidad(1);
-            r.setPrescripcion(p);
-            r.setEstadoReceta(EstadoReceta.GENERADA);
-            r.setInicioValidez(addDays(p.getFechaInicio(), (duracion * i) + DIAS_ANTES));
-            r.setFinValidez(addDays(p.getFechaInicio(), (duracion * i) + DIAS_DESPUES));
-            recetaDAO.crear(r);
+        try {
+            long diff = p.getFechaFin().getTime() - p.getFechaInicio().getTime();
+            int diasTotales = (int) Math.ceil(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            double b = ((double) p.getDosis() * diasTotales) / p.getMedicamento().getNumeroDosis();
+            int numRecetas = (int) Math.ceil(b);
+            int duracion = (int) Math.floor((p.getMedicamento().getNumeroDosis() / p.getDosis()));
+            for (int i = 0; i < numRecetas; i++) {
+                Receta r = new Receta();
+                r.setCantidad(1);
+                r.setPrescripcion(p);
+                r.setEstadoReceta(EstadoReceta.GENERADA);
+                r.setInicioValidez(addDays(p.getFechaInicio(), (duracion * i) + DIAS_ANTES));
+                r.setFinValidez(addDays(p.getFechaInicio(), (duracion * i) + DIAS_DESPUES));
+                recetaDAO.crear(r);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

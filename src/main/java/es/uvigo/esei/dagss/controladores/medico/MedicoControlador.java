@@ -7,7 +7,6 @@ import es.uvigo.esei.dagss.controladores.autenticacion.AutenticacionControlador;
 import es.uvigo.esei.dagss.dominio.daos.*;
 import es.uvigo.esei.dagss.dominio.entidades.*;
 import es.uvigo.esei.dagss.dominio.services.PrescripcionService;
-import org.primefaces.event.SelectEvent;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -49,6 +48,7 @@ public class MedicoControlador implements Serializable {
     private Tratamiento tratamientoActual;
     private Prescripcion prescripcionActual;
     private List<Prescripcion> prescripciones;
+    private String descripcionTratamiento;
 
     /**
      * Creates a new instance of AdministradorControlador
@@ -128,6 +128,14 @@ public class MedicoControlador implements Serializable {
         this.prescripciones = prescripciones;
     }
 
+    public String getDescripcionTratamiento() {
+        return descripcionTratamiento;
+    }
+
+    public void setDescripcionTratamiento(String descripcionTratamiento) {
+        this.descripcionTratamiento = descripcionTratamiento;
+    }
+
     private boolean parametrosAccesoInvalidos() {
         return (((dni == null) && (numeroColegiado == null)) || (password == null));
     }
@@ -142,7 +150,6 @@ public class MedicoControlador implements Serializable {
         }
         return medico;
     }
-
 
     @PostConstruct
     public void inicializar() {
@@ -190,70 +197,54 @@ public class MedicoControlador implements Serializable {
         return "index";
     }
 
+    public void doNuevoTratamiento() {
+        tratamientoActual = new Tratamiento();
+        descripcionTratamiento = "";
+        limpiarPrescripciones();
+        limpiarPrescripcionActual();
+    }
+
     public void doGuardarTratamiento(Paciente paciente) {
-        tratamientoActual.setFecha(Calendar.getInstance().getTime());
-        tratamientoActual.setPaciente(paciente);
         tratamientoActual.setPrescripciones(prescripciones);
-        tratamientoDAO.actualizar(tratamientoActual);
-        prescripcionService.generarRecetas(tratamientoActual);
+        Tratamiento t = tratamientoDAO.actualizar(tratamientoActual);
+        prescripcionService.generarRecetas(t);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
         tratamientoActual = null;
-        clear();
+        limpiarPrescripcionActual();
     }
 
     public void doActualizarTratamiento(Paciente paciente){
         tratamientoDAO.actualizar(tratamientoActual);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
         tratamientoActual = null;
-        clear();
+        limpiarPrescripcionActual();
     }
 
-    public void doNewTratamiento() {
-
-        tratamientoActual = new Tratamiento();
-        clear();
-    }
-
-    public void doEditTratamiento() {
-
-        for (Prescripcion p : tratamientoActual.getPrescripciones()) {
-            if (p.getId().equals(prescripcionActual.getId())) {
-                tratamientoActual.getPrescripciones().remove(p);
-                tratamientoActual.getPrescripciones().add(prescripcionActual);
-                break;
-            }
-        }
-
-        tratamientoDAO.actualizar(tratamientoActual);
-        doNewPrescripcion();
-    }
-
-    public String doDeleteTratamiento(Tratamiento tratamiento) {
-        tratamientoDAO.eliminar(tratamiento);
-        tratamientos = tratamientoDAO.buscarPorIDPaciente(tratamiento.getPaciente().getId());
-        tratamientoActual = null;
-        return "detallesCita";
-    }
-
-    public void doNewPrescripcion() {
+    public void doEditarTratamiento() {
         prescripcionActual = new Prescripcion();
     }
 
-    public void doGuardarPrescripcion(Paciente paciente) {
+    public void doBorrarTratamiento() {
+        tratamientoDAO.eliminar(tratamientoActual);
+        tratamientos = tratamientoDAO.buscarPorIDPaciente(tratamientoActual.getPaciente().getId());
+        tratamientoActual = null;
+    }
+
+    public void doNuevaPrescripcion(Paciente paciente) {
         prescripcionActual.setMedico(medicoActual);
         prescripcionActual.setTratamiento(tratamientoActual);
         prescripcionActual.setPaciente(paciente);
         prescripcionDAO.crear(prescripcionActual);
         tratamientoActual.getPrescripciones().add(prescripcionActual);
         tratamientoDAO.actualizar(tratamientoActual);
-        clear();
+        limpiarPrescripcionActual();
     }
 
-    public void doGuardarrPrescripcion(Paciente paciente) {
+    public void doGuardarPrescripcion(Paciente paciente) {
         if (tratamientoActual.getId() == null) {
             tratamientoActual.setFecha(Calendar.getInstance().getTime());
             tratamientoActual.setPaciente(paciente);
-            tratamientoActual.setDescripcion("");
+            tratamientoActual.setDescripcion(descripcionTratamiento);
             tratamientoDAO.crear(tratamientoActual);
         }
         prescripcionActual.setMedico(medicoActual);
@@ -262,19 +253,10 @@ public class MedicoControlador implements Serializable {
         prescripcionDAO.crear(prescripcionActual);
         prescripciones.add(prescripcionActual);
         prescripciones = prescripcionDAO.buscarPorIdPacienteAndIdTratamiento(paciente.getId(), tratamientoActual.getId());
-        clear();
+        limpiarPrescripcionActual();
     }
 
-    public void clear() {
-        prescripcionActual = new Prescripcion();
-    }
-
-    public List<Medicamento> completeMedicamentos(String descripcion) {
-        return medicamentoDAO.buscarPorDescripcion(descripcion);
-    }
-
-    public void doDeletePrescripcion() {
-
+    public void doBorrarPrescripcion() {
         for ( Prescripcion prescripcion : tratamientoActual.getPrescripciones() ) {
             if( prescripcionActual.getId().equals(prescripcion.getId()) ) {
                 tratamientoActual.getPrescripciones().remove(prescripcion);
@@ -282,7 +264,26 @@ public class MedicoControlador implements Serializable {
         }
     }
 
-    public List<Medicamento> todosMedicamentos() {
-        return medicamentoDAO.buscarTodos();
+    public List<Medicamento> doBuscarMedicamentosPorCadena(String cadena) {
+        return medicamentoDAO.buscarPorDescripcion(cadena);
     }
+
+    public void clear(){
+        limpiarPrescripciones();
+        limpiarPrescripcionActual();
+        limpiarDescripcionTratamiento();
+    }
+
+    private void limpiarPrescripciones() {
+        prescripciones = new ArrayList<>();
+    }
+
+    private void limpiarPrescripcionActual() {
+        prescripcionActual = new Prescripcion();
+    }
+
+    private void limpiarDescripcionTratamiento() {
+        descripcionTratamiento = "";
+    }
+
 }
