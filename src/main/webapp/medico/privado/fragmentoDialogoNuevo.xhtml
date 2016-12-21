@@ -63,7 +63,7 @@
                         <p:panelGrid columns="2" styleClass="ui-noborder">
                             <p:outputLabel value="Descripcion del Tratamiento" for="descripcion"/>
                             <p:inputTextarea id="descripcion" rows="1" cols="50" value="#{medicoControlador.descripcionTratamiento}" required="true">
-                                <p:ajax update="@this"/>
+                                <p:ajax event="keyup" update="descripcion" />
                             </p:inputTextarea>
                         </p:panelGrid>
                     </div>
@@ -109,7 +109,7 @@
                                 <b:commandButton value="Guardar Tratamiento" styleClass="btn-success"
                                                  iconAwesome="fa-floppy-o"
                                                  actionListener="#{medicoControlador.doGuardarTratamiento(agendaControlador.citaActual.paciente)}"
-                                                 disabled="#{empty medicoControlador.prescripcionActual}"
+                                                 disabled="#{empty medicoControlador.prescripciones or descripcion == ''}"
                                                  onclick="PF('DialogoNuevo').hide()"
                                                  update="@(formularioListadoTratamientos),:formularioNuevo:tablaListadoNuevo,:formularioNuevaPrescripcion"/>
 
