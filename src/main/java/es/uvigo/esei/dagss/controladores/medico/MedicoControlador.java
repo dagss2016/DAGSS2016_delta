@@ -15,7 +15,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -176,8 +175,6 @@ public class MedicoControlador implements Serializable {
         return destino;
     }
 
-    //Acciones
-
     public String doShowCita(Cita citaActual) {
         tratamientos = tratamientoDAO.buscarPorIDPaciente(citaActual.getPaciente().getId());
         citasAnteriores = citaDAO.buscarCitasAnteriores(citaActual.getMedico().getId(), citaActual.getPaciente().getId());
@@ -197,19 +194,20 @@ public class MedicoControlador implements Serializable {
     }
 
     public void doNuevoTratamiento() {
-        tratamientoActual = new Tratamiento();
-        descripcionTratamiento = "";
-        inicializarPrescripciones();
-        inicializarPrescripcionActual();
+        inicializarVariables();
     }
 
     public void doGuardarTratamiento(Paciente paciente) {
-        tratamientoActual.setPrescripciones(prescripciones);
-        Tratamiento t = tratamientoDAO.actualizar(tratamientoActual);
-        prescripcionService.generarRecetas(t);
-        tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
-        tratamientoActual = null;
-        inicializarPrescripcionActual();
+        if(prescripciones.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No había ninguna prescripción."));
+            tratamientoDAO.eliminar(tratamientoActual);
+        } else {
+            tratamientoActual.setPrescripciones(prescripciones);
+            Tratamiento t = tratamientoDAO.actualizar(tratamientoActual);
+            prescripcionService.generarRecetas(t);
+            tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
+        }
     }
 
     public void doActualizarTratamiento(Paciente paciente){
@@ -269,13 +267,8 @@ public class MedicoControlador implements Serializable {
     public void inicializarVariables() {
         inicializarDescripcionTratamiento();
         inicializarTratamientoActual();
-        inicializarTratamientos();
         inicializarPrescripciones();
         inicializarPrescripcionActual();
-    }
-
-    private void inicializarTratamientos() {
-        tratamientos = new ArrayList<>();
     }
 
     private void inicializarPrescripciones() {
