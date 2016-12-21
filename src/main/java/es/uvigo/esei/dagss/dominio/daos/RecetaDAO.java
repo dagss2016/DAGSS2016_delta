@@ -28,4 +28,11 @@ public class RecetaDAO extends GenericoDAO<Receta>{
         q.setParameter("date", cal.getTime());
         return q.getResultList();
     }
+
+    public  List<Receta> buscarPorIdPrescripcion(Long id){
+        TypedQuery<Receta> q = em.createQuery("SELECT r FROM Receta r " +
+                "WHERE r.prescripcion.id >= :id", Receta.class);
+        q.setParameter("id", id);
+        return q.getResultList();
+    }
 }

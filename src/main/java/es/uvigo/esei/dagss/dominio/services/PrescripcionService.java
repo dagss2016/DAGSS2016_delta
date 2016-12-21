@@ -33,7 +33,7 @@ public class PrescripcionService implements Serializable {
         }
     }
 
-    private void generarReceta(Prescripcion p) {
+    public void generarReceta(Prescripcion p) {
         try {
             long diff = p.getFechaFin().getTime() - p.getFechaInicio().getTime();
             int diasTotales = (int) Math.ceil(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
@@ -51,6 +51,12 @@ public class PrescripcionService implements Serializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void borrarReceta(Prescripcion p) {
+        for ( Receta r : recetaDAO.buscarPorIdPrescripcion(p.getId()) ) {
+            recetaDAO.eliminar(r);
         }
     }
 

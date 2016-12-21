@@ -39,6 +39,7 @@ public class MedicoControlador implements Serializable {
     private AutenticacionControlador autenticacionControlador;
     @EJB
     private MedicoDAO medicoDAO;
+
     private Medico medicoActual;
     private String dni;
     private String numeroColegiado;
@@ -241,6 +242,7 @@ public class MedicoControlador implements Serializable {
         prescripcionActual.setTratamiento(tratamientoActual);
         prescripcionActual.setPaciente(paciente);
         prescripcionDAO.crear(prescripcionActual);
+        prescripcionService.generarReceta(prescripcionActual);
         tratamientoActual.getPrescripciones().add(prescripcionActual);
         tratamientoDAO.actualizar(tratamientoActual);
         prescripciones = prescripcionDAO.buscarPorIdPacienteAndIdTratamiento(paciente.getId(), tratamientoActual.getId());
@@ -251,6 +253,7 @@ public class MedicoControlador implements Serializable {
         for ( Prescripcion prescripcion : tratamientoActual.getPrescripciones() ) {
             if( prescripcionActual.getId().equals(prescripcion.getId()) ) {
                 tratamientoActual.getPrescripciones().remove(prescripcion);
+                prescripcionService.borrarReceta(prescripcion);
             }
         }
     }
@@ -263,6 +266,18 @@ public class MedicoControlador implements Serializable {
         limpiarPrescripciones();
         limpiarPrescripcionActual();
         limpiarDescripcionTratamiento();
+    }
+
+    public void doCerrarDialgoNuevoTratamiento() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo nuevo."));
+    }
+
+    public void doCerrarDialgoVerTratamiento() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo ver."));
+    }
+
+    public void doCerrarDialgoEditarTratamiento() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo editar."));
     }
 
     private void limpiarPrescripciones() {
