@@ -49,7 +49,7 @@
                                     value="#{medicoControlador.prescripcionActual.fechaFin}" required="true"/>
 
 
-                        <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus" value="Nueva"
+                        <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus"
                                          actionListener="#{medicoControlador.doNuevaPrescripcion(agendaControlador.citaActual.paciente)}"
                                          update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
 
@@ -62,7 +62,7 @@
                     <div class="form-group">
                         <p:panelGrid columns="2" styleClass="ui-noborder">
                             <p:outputLabel value="Descripcion del Tratamiento" for="descripcion"/>
-                            <p:inputTextarea id="descripcion" cols="121" rows="1" value="#{medicoControlador.tratamientoActual.descripcion}" required="true">
+                            <p:inputTextarea id="descripcion" cols="50" rows="1" value="#{medicoControlador.tratamientoActual.descripcion}" required="true">
                                 <p:ajax update="@this"/>
                             </p:inputTextarea>
                         </p:panelGrid>
