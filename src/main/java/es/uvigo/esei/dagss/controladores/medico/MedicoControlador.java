@@ -15,12 +15,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
 @Named(value = "medicoControlador")
 @SessionScoped
 public class MedicoControlador implements Serializable {
@@ -40,20 +40,18 @@ public class MedicoControlador implements Serializable {
     @EJB
     private MedicoDAO medicoDAO;
 
-    private Medico medicoActual;
     private String dni;
-    private String numeroColegiado;
     private String password;
+    private Medico medicoActual;
+    private String numeroColegiado;
     private List<Cita> citasAnteriores;
-    private List<Tratamiento> tratamientos;
+
+    private String descripcionTratamiento;
     private Tratamiento tratamientoActual;
+    private List<Tratamiento> tratamientos;
     private Prescripcion prescripcionActual;
     private List<Prescripcion> prescripciones;
-    private String descripcionTratamiento;
 
-    /**
-     * Creates a new instance of AdministradorControlador
-     */
     public MedicoControlador() {
     }
 
@@ -154,7 +152,7 @@ public class MedicoControlador implements Serializable {
 
     @PostConstruct
     public void inicializar() {
-        prescripciones = new ArrayList<>();
+        inicializarVariables();
     }
 
     public String doLogin() {
@@ -201,8 +199,8 @@ public class MedicoControlador implements Serializable {
     public void doNuevoTratamiento() {
         tratamientoActual = new Tratamiento();
         descripcionTratamiento = "";
-        limpiarPrescripciones();
-        limpiarPrescripcionActual();
+        inicializarPrescripciones();
+        inicializarPrescripcionActual();
     }
 
     public void doGuardarTratamiento(Paciente paciente) {
@@ -211,14 +209,14 @@ public class MedicoControlador implements Serializable {
         prescripcionService.generarRecetas(t);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
         tratamientoActual = null;
-        limpiarPrescripcionActual();
+        inicializarPrescripcionActual();
     }
 
     public void doActualizarTratamiento(Paciente paciente){
         tratamientoDAO.actualizar(tratamientoActual);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
         tratamientoActual = null;
-        limpiarPrescripcionActual();
+        inicializarPrescripcionActual();
     }
 
     public void doEditarTratamiento() {
@@ -246,7 +244,7 @@ public class MedicoControlador implements Serializable {
         tratamientoActual.getPrescripciones().add(prescripcionActual);
         tratamientoDAO.actualizar(tratamientoActual);
         prescripciones = prescripcionDAO.buscarPorIdPacienteAndIdTratamiento(paciente.getId(), tratamientoActual.getId());
-        limpiarPrescripcionActual();
+        inicializarPrescripcionActual();
     }
 
     public void doBorrarPrescripcion() {
@@ -258,38 +256,60 @@ public class MedicoControlador implements Serializable {
         }
     }
 
+    public void doBorrarPrescripcion(Prescripcion p) {
+        if(!prescripciones.isEmpty()) {
+            prescripciones.remove(p);
+        }
+    }
+
     public List<Medicamento> doBuscarMedicamentosPorCadena(String cadena) {
         return medicamentoDAO.buscarPorDescripcion(cadena);
     }
 
-    public void clear(){
-        limpiarPrescripciones();
-        limpiarPrescripcionActual();
-        limpiarDescripcionTratamiento();
+    public void inicializarVariables() {
+        inicializarDescripcionTratamiento();
+        inicializarTratamientoActual();
+        inicializarTratamientos();
+        inicializarPrescripciones();
+        inicializarPrescripcionActual();
     }
 
-    public void doCerrarDialgoNuevoTratamiento() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo nuevo."));
+    private void inicializarTratamientos() {
+        tratamientos = new ArrayList<>();
     }
 
-    public void doCerrarDialgoVerTratamiento() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo ver."));
-    }
-
-    public void doCerrarDialgoEditarTratamiento() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo editar."));
-    }
-
-    private void limpiarPrescripciones() {
+    private void inicializarPrescripciones() {
         prescripciones = new ArrayList<>();
     }
 
-    private void limpiarPrescripcionActual() {
+    private void inicializarDescripcionTratamiento() {
+        descripcionTratamiento = "";
+    }
+
+    private void inicializarTratamientoActual() {
+        tratamientoActual = new Tratamiento();
+    }
+
+    private void inicializarPrescripcionActual() {
         prescripcionActual = new Prescripcion();
     }
 
-    private void limpiarDescripcionTratamiento() {
-        descripcionTratamiento = "";
+    @SuppressWarnings("unused")
+    public void doCerrarDialgoNuevoTratamiento() {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo nuevo."));
+    }
+
+    @SuppressWarnings("unused")
+    public void doCerrarDialgoVerTratamiento() {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo ver."));
+    }
+
+    @SuppressWarnings("unused")
+    public void doCerrarDialgoEditarTratamiento() {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo editar."));
     }
 
 }
