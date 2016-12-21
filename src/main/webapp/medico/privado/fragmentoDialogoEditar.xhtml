@@ -18,8 +18,8 @@
                     <h4><p:outputLabel value="Datos prescripcion"/></h4>
                     <p:panelGrid columns="6" styleClass="ui-noborder">
 
-                        <p:outputLabel value="Dosis" for="dosis"/>
                         <p:outputLabel value="Medicamento" for="medicamento"/>
+                        <p:outputLabel value="Dosis" for="dosis"/>
                         <p:outputLabel value="Indicaciones" for="indicaciones"/>
                         <p:outputLabel value="Fecha Inicio" for="fechaInicio"/>
                         <p:outputLabel value="Fecha Fin" for="fechaFin"/>
@@ -71,12 +71,9 @@
                     <p:dataTable id="tablaListadoEditar"
                                  value="#{medicoControlador.tratamientoActual.prescripciones}"
                                  var="prescripcion"
-                                 selectionMode="single"
-                                 selection="#{medicoControlador.prescripcionActual}"
                                  paginator="true" paginatorPosition="bottom" rows="6" rowKey="#{prescripcion.id}">
 
-                        <p:ajax event="rowSelect"
-                                update=" :formularioEditarPrescripcion "/>
+
 
                         <f:facet name="header">
                             <h:outputText value="Listado de Prescripciones"/>
