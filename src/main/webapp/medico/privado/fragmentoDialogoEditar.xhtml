@@ -62,9 +62,9 @@
                     <div class="form-group">
                         <p:panelGrid columns="2" styleClass="ui-noborder">
                             <p:outputLabel value="Descripcion del Tratamiento" for="descripcion"/>
-                            <p:inputText id="descripcion" value="#{medicoControlador.tratamientoActual.descripcion}" required="true">
+                            <p:inputTextarea id="descripcion" cols="121" rows="1" value="#{medicoControlador.tratamientoActual.descripcion}" required="true">
                                 <p:ajax update="@this"/>
-                            </p:inputText>
+                            </p:inputTextarea>
                         </p:panelGrid>
                     </div>
                     <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
