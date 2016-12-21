@@ -152,7 +152,7 @@ public class MedicoControlador implements Serializable {
 
     @PostConstruct
     public void inicializar() {
-        inicializarVariables();
+
     }
 
     public String doLogin() {
