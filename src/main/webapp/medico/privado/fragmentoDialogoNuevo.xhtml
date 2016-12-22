@@ -10,6 +10,8 @@
     <p:dialog id="dialogoNuevo" widgetVar="DialogoNuevo" modal="true" resizable="false"
               appendTo="@(body)" closable="false" header="Nuevo Tratamiento">
 
+        <p:messages id="dialogoNuevoMensajes"  for="formularioNuevaPrescripcion" showDetail="true" autoUpdate="true" closable="true" />
+
         <div class="container-fluid">
                 <h:form id="formularioNuevaPrescripcion">
                     <!--@elvariable id="m" type="es.uvigo.esei.dagss.dominio.entidades.Medicamento"-->
@@ -44,31 +46,30 @@
                             <p:calendar id="fechaInicio" pattern="dd-MM-yyyy"
                                             value="#{medicoControlador.prescripcionActual.fechaInicio}" required="true"/>
 
-                                <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
+                            <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
                                             value="#{medicoControlador.prescripcionActual.fechaFin}" required="true"/>
 
 
                             <b:commandButton id="botonNuevaNuevo" styleClass="btn-success" iconAwesome="fa-plus"
                                              actionListener="#{medicoControlador.doNuevaPrescripcion(agendaControlador.citaActual.paciente)}"
-                                             update="@(tablaListadoNueva),:formularioNuevaPrescripcion, formularioNuevo"/>
+                                             update="@(tablaListadoNueva), :formularioNuevaPrescripcion, formularioNuevo"/>
 
                         </p:panelGrid>
 
                     </div>
                 </h:form>
 
-
                 <h:form id="formularioNuevo">
-                    <div class="form-group">
-                        <p:panelGrid columns="2" styleClass="ui-noborder">
-                            <p:outputLabel value="Descripcion del Tratamiento" for="descripcion"/>
-                            <p:inputTextarea id="descripcion" rows="1" cols="50" value="#{medicoControlador.descripcionTratamiento}" required="true">
-                                <p:ajax event="keyup" update="descripcion" />
-                            </p:inputTextarea>
-                        </p:panelGrid>
-                    </div>
 
-                    <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
+                    <p:panelGrid columns="2" styleClass="ui-noborder">
+                        <p:outputLabel value="Descripcion del Tratamiento" for="descripcion"/>
+                        <p:inputTextarea id="descripcion" rows="1" cols="50"
+                                         value="#{medicoControlador.descripcionTratamiento}" required="true">
+                            <f:validateRequired/>
+                        </p:inputTextarea>
+                    </p:panelGrid>
+
+                   <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
                     <p:dataTable id="tablaListadoNuevo"
                                  value="#{medicoControlador.prescripciones}"
                                  var="prescripcion"
@@ -106,12 +107,13 @@
 
                         <f:facet name="footer">
                             <div class="btn-group">
-                                <b:commandButton value="Guardar Tratamiento" styleClass="btn-success"
-                                                 iconAwesome="fa-floppy-o"
+
+                                <b:commandButton id="btnNuevoTratamiento" value="Guardar Tratamiento"
+                                                 styleClass="btn-success" iconAwesome="fa-floppy-o"
                                                  actionListener="#{medicoControlador.doGuardarTratamiento(agendaControlador.citaActual.paciente)}"
-                                                 disabled="#{empty medicoControlador.prescripciones or descripcion == ''}"
-                                                 onclick="PF('DialogoNuevo').hide()"
-                                                 update="@(formularioListadoTratamientos),:formularioNuevo:tablaListadoNuevo,:formularioNuevaPrescripcion"/>
+                                                 disabled="#{empty medicoControlador.prescripciones}"
+                                                 update=":formularioNuevo:tablaListadoNuevo, :formularioNuevaPrescripcion">
+                                </b:commandButton>
 
                                 <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
                                                  onclick="PF('DialogoNuevo').hide()"
@@ -119,10 +121,9 @@
                             </div>
                         </f:facet>
                     </p:dataTable>
+
                 </h:form>
             </div>
-
-
     </p:dialog>
 </ui:composition>
 </html>

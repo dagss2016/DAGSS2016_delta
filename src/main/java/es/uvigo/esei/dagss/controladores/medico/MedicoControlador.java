@@ -7,6 +7,7 @@ import es.uvigo.esei.dagss.controladores.autenticacion.AutenticacionControlador;
 import es.uvigo.esei.dagss.dominio.daos.*;
 import es.uvigo.esei.dagss.dominio.entidades.*;
 import es.uvigo.esei.dagss.dominio.services.PrescripcionService;
+import org.primefaces.context.RequestContext;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -198,51 +199,41 @@ public class MedicoControlador implements Serializable {
     }
 
     public void doGuardarTratamiento(Paciente paciente) {
-        if(prescripciones.isEmpty()) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No había ninguna prescripción."));
-            tratamientoDAO.eliminar(tratamientoActual);
-        } else {
+        if (!descripcionTratamiento.isEmpty()) {
             tratamientoActual.setPrescripciones(prescripciones);
+            tratamientoActual.setDescripcion(descripcionTratamiento);
             Tratamiento t = tratamientoDAO.actualizar(tratamientoActual);
             prescripcionService.generarRecetas(t);
             tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('DialogoNuevo').hide();");
+            resetearVariables();
+        } else {
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('DialogoNuevo').show();");
         }
     }
 
     public void doActualizarTratamiento(Paciente paciente){
         tratamientoDAO.actualizar(tratamientoActual);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
-        tratamientoActual = null;
-        inicializarPrescripcionActual();
+        resetearVariables();
     }
 
     public void doEditarTratamiento() {
-        prescripcionActual = new Prescripcion();
+        inicializarPrescripcionActual();
     }
 
     public void doBorrarTratamiento() {
         tratamientoDAO.eliminar(tratamientoActual);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(tratamientoActual.getPaciente().getId());
-        tratamientoActual = null;
+        resetearTratamientoActual();
     }
 
     public void doNuevaPrescripcion(Paciente paciente) {
-        if (tratamientoActual.getId() == null) {
-            tratamientoActual.setFecha(Calendar.getInstance().getTime());
-            tratamientoActual.setPaciente(paciente);
-            tratamientoActual.setDescripcion(descripcionTratamiento);
-            tratamientoDAO.crear(tratamientoActual);
-        }
-        prescripcionActual.setMedico(medicoActual);
-        prescripcionActual.setTratamiento(tratamientoActual);
-        prescripcionActual.setPaciente(paciente);
-        prescripcionDAO.crear(prescripcionActual);
-        prescripcionService.generarReceta(prescripcionActual);
-        tratamientoActual.getPrescripciones().add(prescripcionActual);
-        tratamientoDAO.actualizar(tratamientoActual);
-        prescripciones = prescripcionDAO.buscarPorIdPacienteAndIdTratamiento(paciente.getId(), tratamientoActual.getId());
-        inicializarPrescripcionActual();
+        crearTratamientoIfNull(paciente);
+        crearPrescripcion(paciente);
+        resetearPrescripcionActual();
     }
 
     public void doBorrarPrescripcion() {
@@ -255,7 +246,7 @@ public class MedicoControlador implements Serializable {
     }
 
     public void doBorrarPrescripcion(Prescripcion p) {
-        if(!prescripciones.isEmpty()) {
+        if(!prescripciones.isEmpty() ) {
             prescripciones.remove(p);
         }
     }
@@ -265,18 +256,38 @@ public class MedicoControlador implements Serializable {
     }
 
     public void inicializarVariables() {
-        inicializarDescripcionTratamiento();
         inicializarTratamientoActual();
         inicializarPrescripciones();
         inicializarPrescripcionActual();
+        inicializarDescripcionTratamiento();
+    }
+
+    public void resetearVariables(){
+        resetearTratamientoActual();
+        resetearPrescripciones();
+        resetearPrescripcionActual();
+        resetearDescripcionTratamiento();
+    }
+
+    private void crearTratamientoIfNull(Paciente paciente){
+        if (tratamientoActual.getId() == null) {
+            tratamientoActual.setFecha(Calendar.getInstance().getTime());
+            tratamientoActual.setPaciente(paciente);
+            tratamientoActual.setDescripcion("");
+            tratamientoActual = tratamientoDAO.crear(tratamientoActual);
+        }
+    }
+
+    private void crearPrescripcion(Paciente paciente){
+        prescripcionActual.setMedico(medicoActual);
+        prescripcionActual.setTratamiento(tratamientoActual);
+        prescripcionActual.setPaciente(paciente);
+        prescripcionDAO.crear(prescripcionActual);
+        prescripciones.add(prescripcionActual);
     }
 
     private void inicializarPrescripciones() {
         prescripciones = new ArrayList<>();
-    }
-
-    private void inicializarDescripcionTratamiento() {
-        descripcionTratamiento = "";
     }
 
     private void inicializarTratamientoActual() {
@@ -285,6 +296,26 @@ public class MedicoControlador implements Serializable {
 
     private void inicializarPrescripcionActual() {
         prescripcionActual = new Prescripcion();
+    }
+
+    private void inicializarDescripcionTratamiento() {
+        descripcionTratamiento = "";
+    }
+
+    private void resetearPrescripciones() {
+        prescripciones = null;
+    }
+
+    private void resetearTratamientoActual() {
+        tratamientoActual = null;
+    }
+
+    private void resetearPrescripcionActual() {
+        prescripcionActual = null;
+    }
+
+    private void resetearDescripcionTratamiento() {
+        descripcionTratamiento = null;
     }
 
     @SuppressWarnings("unused")
