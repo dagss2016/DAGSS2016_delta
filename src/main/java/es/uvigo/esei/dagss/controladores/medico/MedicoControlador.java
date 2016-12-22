@@ -216,18 +216,25 @@ public class MedicoControlador implements Serializable {
 
     public void doActualizarTratamiento(Paciente paciente){
 
-        for (Prescripcion p: prescripciones) {
+        List<Prescripcion> toRemove = new ArrayList<>();
+
+        for (Prescripcion p : prescripciones) {
             if (!tratamientoActual.getPrescripciones().contains(p)){
                 tratamientoActual.getPrescripciones().add(p);
                 prescripcionDAO.crear(p);
+                prescripcionService.generarReceta(p);
             }
         }
 
-        for (Prescripcion p: tratamientoActual.getPrescripciones()) {
+        for (Prescripcion p : tratamientoActual.getPrescripciones()) {
             if (!prescripciones.contains(p)){
-                tratamientoActual.getPrescripciones().remove(p);
-                prescripcionDAO.eliminar(p);
+                toRemove.add(p);
             }
+        }
+
+        for (Prescripcion p : toRemove ) {
+            tratamientoActual.getPrescripciones().remove(p);
+            prescripcionDAO.eliminar(p);
         }
 
         tratamientoDAO.actualizar(tratamientoActual);
