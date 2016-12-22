@@ -70,7 +70,7 @@
                 </div>
                 <!--@elvariable id="prescripcion" type="es.uvigo.esei.dagss.dominio.entidades.Prescripcion"-->
                 <p:dataTable id="tablaListadoEditar"
-                             value="#{medicoControlador.tratamientoActual.prescripciones}"
+                             value="#{medicoControlador.prescripciones}"
                              var="prescripcion"
                              paginator="true" paginatorPosition="bottom" rows="6" rowKey="#{prescripcion.id}">
 
@@ -116,7 +116,6 @@
                                              iconAwesome="fa-floppy-o" value="Guardar"
                                              onclick="PF('DialogoEditar').hide()"
                                              actionListener="#{medicoControlador.doActualizarTratamiento(agendaControlador.citaActual.paciente)}"
-                                             disabled="#{empty medicoControlador.prescripcionActual}"
                                              update=":formularioEditar:tablaListadoEditar,:formularioEditarPrescripcion"/>
 
                             <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
