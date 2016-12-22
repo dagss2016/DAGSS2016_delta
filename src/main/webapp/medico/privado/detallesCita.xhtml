@@ -150,7 +150,7 @@
                                                              value="Borrar"
                                                              actionListener="#{medicoControlador.doBorrarTratamiento}"
                                                              update="tablaListadoTratamientos"
-                                                             disabled="#{medicoControlador.tratamientoActual == null}"/>
+                                                             disabled="#{empty medicoControlador.tratamientoActual}"/>
                                         </div>
 
                                     </f:facet>
