@@ -50,7 +50,7 @@
 
 
                         <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus"
-                                         actionListener="#{medicoControlador.doNuevaPrescripcion(agendaControlador.citaActual.paciente)}"
+                                         actionListener="#{medicoControlador.doNuevaPrescripcionEditar(agendaControlador.citaActual.paciente)}"
                                          update="@(tablaListadoEditar),:formularioEditarPrescripcion, formularioEditar"/>
 
                     </p:panelGrid>
@@ -114,13 +114,14 @@
                         <div class="btn-group ">
                             <b:commandButton id="botonGuardarEditar" styleClass="btn-success"
                                              iconAwesome="fa-floppy-o" value="Guardar"
+                                             disabled="#{empty medicoControlador.prescripciones}"
                                              onclick="PF('DialogoEditar').hide()"
                                              actionListener="#{medicoControlador.doActualizarTratamiento(agendaControlador.citaActual.paciente)}"
                                              update=":formularioEditar:tablaListadoEditar,:formularioEditarPrescripcion"/>
 
                             <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
                                              onclick="PF('DialogoEditar').hide()"
-                                             actionListener="#{medicoControlador.inicializarVariables}"/>
+                                             actionListener="#{medicoControlador.doCancelarEditarTratamiento}"/>
                         </div>
                     </f:facet>
 

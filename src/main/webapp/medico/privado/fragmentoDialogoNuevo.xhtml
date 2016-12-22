@@ -110,14 +110,15 @@
 
                                 <b:commandButton id="btnNuevoTratamiento" value="Guardar Tratamiento"
                                                  styleClass="btn-success" iconAwesome="fa-floppy-o"
-                                                 actionListener="#{medicoControlador.doGuardarTratamiento(agendaControlador.citaActual.paciente)}"
+                                                 action="#{medicoControlador.doGuardarTratamiento(agendaControlador.citaActual.paciente)}"
                                                  disabled="#{empty medicoControlador.prescripciones}"
-                                                 update=":formularioNuevo:tablaListadoNuevo, :formularioNuevaPrescripcion">
+                                                 update=":formularioNuevo:tablaListadoNuevo,:formularioNuevaPrescripcion">
                                 </b:commandButton>
 
                                 <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
-                                                 onclick="PF('DialogoNuevo').hide()"
-                                                 actionListener="#{medicoControlador.resetearVariables()}"/>
+                                                 action="#{medicoControlador.doCancelarNuevoTratamiento}">
+                                    <p:ajax event="click" listener="#{medicoControlador.doCancelarNuevoTratamiento}"/>
+                                </b:commandButton>
                             </div>
                         </f:facet>
                     </p:dataTable>

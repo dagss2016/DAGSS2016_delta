@@ -219,12 +219,14 @@ public class MedicoControlador implements Serializable {
         for (Prescripcion p: prescripciones) {
             if (!tratamientoActual.getPrescripciones().contains(p)){
                 tratamientoActual.getPrescripciones().add(p);
+                prescripcionDAO.crear(p);
             }
         }
 
         for (Prescripcion p: tratamientoActual.getPrescripciones()) {
             if (!prescripciones.contains(p)){
                 tratamientoActual.getPrescripciones().remove(p);
+                prescripcionDAO.eliminar(p);
             }
         }
 
@@ -236,7 +238,11 @@ public class MedicoControlador implements Serializable {
     public void doEditarTratamiento() {
         inicializarPrescripcionActual();
         inicializarPrescripciones();
-        prescripciones = tratamientoActual.getPrescripciones();
+        for (Prescripcion p: tratamientoActual.getPrescripciones()
+             ) {
+
+            prescripciones.add(p);
+        }
     }
 
     public void doBorrarTratamiento() {
@@ -245,20 +251,31 @@ public class MedicoControlador implements Serializable {
         resetearTratamientoActual();
     }
 
+    public void doCancelarNuevoTratamiento(){
+        tratamientoDAO.eliminar(tratamientoActual);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('DialogoNuevo').hide();");
+        resetearVariables();
+    }
+    public void doCancelarEditarTratamiento(){
+        tratamientos = tratamientoDAO.buscarPorIDPaciente(tratamientoActual.getPaciente().getId());
+        resetearVariables();
+    }
+
     public void doNuevaPrescripcion(Paciente paciente) {
         crearTratamientoIfNull(paciente);
         crearPrescripcion(paciente);
         resetearPrescripcionActual();
     }
 
-    public void doBorrarPrescripcion() {
-        for ( Prescripcion prescripcion : tratamientoActual.getPrescripciones() ) {
-            if( prescripcionActual.getId().equals(prescripcion.getId()) ) {
-                tratamientoActual.getPrescripciones().remove(prescripcion);
-                prescripcionService.borrarReceta(prescripcion);
-            }
-        }
+    public void doNuevaPrescripcionEditar(Paciente paciente) {
+        prescripcionActual.setMedico(medicoActual);
+        prescripcionActual.setTratamiento(tratamientoActual);
+        prescripcionActual.setPaciente(paciente);
+        prescripciones.add(prescripcionActual);
+        resetearPrescripcionActual();
     }
+
 
     public void doBorrarPrescripcion(Prescripcion p) {
         if(!prescripciones.isEmpty() ) {
