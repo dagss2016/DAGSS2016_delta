@@ -18,7 +18,7 @@ public class AgendaControlador implements Serializable {
     CitaDAO citaDAO;
     @Inject
     MedicoControlador medicoControlador;
-    Cita citaActual;
+    private Cita citaActual;
     private List<Cita> citas;
 
     public AgendaControlador() {}

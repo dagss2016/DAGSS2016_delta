@@ -10,7 +10,7 @@
     <p:dialog id="dialogoNuevo" widgetVar="DialogoNuevo" modal="true" resizable="false"
               appendTo="@(body)" closable="false" header="Nuevo Tratamiento">
 
-        <p:messages id="dialogoNuevoMensajes"  for="formularioNuevaPrescripcion" showDetail="true" autoUpdate="true" closable="true" />
+        <p:messages id="dialogoNuevoMensajes"  for="dialogoNuevoMensajes" showDetail="true" autoUpdate="true" closable="true" />
 
         <div class="container-fluid">
                 <h:form id="formularioNuevaPrescripcion">
@@ -44,10 +44,12 @@
                                              required="true"/>
 
                             <p:calendar id="fechaInicio" pattern="dd-MM-yyyy"
-                                            value="#{medicoControlador.prescripcionActual.fechaInicio}" required="true"/>
+                                        value="#{medicoControlador.prescripcionActual.fechaInicio}"
+                                        required="true" mindate="#{medicoControlador.today()}"/>
 
                             <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
-                                            value="#{medicoControlador.prescripcionActual.fechaFin}" required="true"/>
+                                            value="#{medicoControlador.prescripcionActual.fechaFin}"
+                                        required="true" mindate="#{medicoControlador.today()}"/>
 
 
                             <b:commandButton id="botonNuevaNuevo" styleClass="btn-success" iconAwesome="fa-plus"

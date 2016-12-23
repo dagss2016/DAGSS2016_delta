@@ -10,6 +10,8 @@
     <p:dialog id="dialogoEditar" widgetVar="DialogoEditar" modal="true" resizable="false"
               appendTo="@(body)" closable="false" header="Editar Tratamiento">
 
+        <p:messages id="dialogoEditarMensajes"  for="dialogoEditarMensajes" showDetail="true" autoUpdate="true" closable="true" />
+
         <div class="container-fluid">
             <h:form id="formularioEditarPrescripcion">
 
@@ -43,10 +45,12 @@
                                      required="true"/>
 
                         <p:calendar id="fechaInicio" pattern="dd-MM-yyyy"
-                                    value="#{medicoControlador.prescripcionActual.fechaInicio}" required="true"/>
+                                    value="#{medicoControlador.prescripcionActual.fechaInicio}"
+                                    required="true" mindate="#{medicoControlador.today()}"/>
 
                         <p:calendar id="fechaFin" pattern="dd-MM-yyyy"
-                                    value="#{medicoControlador.prescripcionActual.fechaFin}" required="true"/>
+                                    value="#{medicoControlador.prescripcionActual.fechaFin}"
+                                    required="true" mindate="#{medicoControlador.today()}"/>
 
 
                         <b:commandButton id="botonNuevaEditar" styleClass="btn-success" iconAwesome="fa-plus"

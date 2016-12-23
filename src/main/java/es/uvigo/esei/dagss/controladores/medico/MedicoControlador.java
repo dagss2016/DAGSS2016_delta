@@ -19,6 +19,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Named(value = "medicoControlador")
@@ -166,7 +167,7 @@ public class MedicoControlador implements Serializable {
             } else {
                 if (autenticacionControlador.autenticarUsuario(medico.getId(), password,
                         TipoUsuario.MEDICO.getEtiqueta().toLowerCase())) {
-                    medicoActual = medico;
+                    setMedicoActual(medico);
                     destino = "privado/index";
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Credenciales de acceso incorrectas", ""));
@@ -208,9 +209,19 @@ public class MedicoControlador implements Serializable {
             RequestContext context = RequestContext.getCurrentInstance();
             context.execute("PF('DialogoNuevo').hide();");
             resetearVariables();
+
+            FacesContext.getCurrentInstance().addMessage("detallesCitaMensajes",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+                            "Tratamiento añadido correctamente."));
         } else {
+
+            FacesContext.getCurrentInstance().addMessage("dialogoNuevoMensajes",
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso",
+                            "Es necesario indicar un nombre para el tratamiento."));
+
             RequestContext context = RequestContext.getCurrentInstance();
             context.execute("PF('DialogoNuevo').show();");
+
         }
     }
 
@@ -235,19 +246,22 @@ public class MedicoControlador implements Serializable {
         for (Prescripcion p : toRemove ) {
             tratamientoActual.getPrescripciones().remove(p);
             prescripcionDAO.eliminar(p);
+            prescripcionService.borrarReceta(p);
         }
 
         tratamientoDAO.actualizar(tratamientoActual);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
         resetearVariables();
+
+        FacesContext.getCurrentInstance().addMessage("detallesCitaMensajes",
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+                        "Tratamiento modificado correctamente."));
     }
 
     public void doEditarTratamiento() {
         inicializarPrescripcionActual();
         inicializarPrescripciones();
-        for (Prescripcion p: tratamientoActual.getPrescripciones()
-             ) {
-
+        for (Prescripcion p: tratamientoActual.getPrescripciones()) {
             prescripciones.add(p);
         }
     }
@@ -256,6 +270,10 @@ public class MedicoControlador implements Serializable {
         tratamientoDAO.eliminar(tratamientoActual);
         tratamientos = tratamientoDAO.buscarPorIDPaciente(tratamientoActual.getPaciente().getId());
         resetearTratamientoActual();
+
+        FacesContext.getCurrentInstance().addMessage("detallesCitaMensajes",
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+                        "Tratamiento eliminado correctamente."));
     }
 
     public void doCancelarNuevoTratamiento(){
@@ -270,19 +288,30 @@ public class MedicoControlador implements Serializable {
     }
 
     public void doNuevaPrescripcion(Paciente paciente) {
-        crearTratamientoIfNull(paciente);
-        crearPrescripcion(paciente);
-        resetearPrescripcionActual();
+        if (validarFechas()) {
+            crearTratamientoIfNull(paciente);
+            crearPrescripcion(paciente);
+            resetearPrescripcionActual();
+        } else {
+            FacesContext.getCurrentInstance().addMessage("dialogoNuevoMensajes",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                            "La fecha de fin tiene que ser mayor que la de inicio."));
+        }
     }
 
     public void doNuevaPrescripcionEditar(Paciente paciente) {
-        prescripcionActual.setMedico(medicoActual);
-        prescripcionActual.setTratamiento(tratamientoActual);
-        prescripcionActual.setPaciente(paciente);
-        prescripciones.add(prescripcionActual);
-        resetearPrescripcionActual();
+        if (validarFechas()) {
+            prescripcionActual.setMedico(getMedicoActual());
+            prescripcionActual.setTratamiento(tratamientoActual);
+            prescripcionActual.setPaciente(paciente);
+            prescripciones.add(prescripcionActual);
+            resetearPrescripcionActual();
+        } else {
+            FacesContext.getCurrentInstance().addMessage("dialogoEditarMensajes",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                            "La fecha de fin tiene que ser mayor que la de inicio."));
+        }
     }
-
 
     public void doBorrarPrescripcion(Prescripcion p) {
         if(!prescripciones.isEmpty() ) {
@@ -294,14 +323,22 @@ public class MedicoControlador implements Serializable {
         return medicamentoDAO.buscarPorDescripcion(cadena);
     }
 
-    public void inicializarVariables() {
+    public Date today(){
+        return Calendar.getInstance().getTime();
+    }
+
+    private boolean validarFechas() {
+        return prescripcionActual.getFechaFin().getTime() > prescripcionActual.getFechaInicio().getTime();
+    }
+
+    private void inicializarVariables() {
         inicializarTratamientoActual();
         inicializarPrescripciones();
         inicializarPrescripcionActual();
         inicializarDescripcionTratamiento();
     }
 
-    public void resetearVariables(){
+    private void resetearVariables(){
         resetearTratamientoActual();
         resetearPrescripciones();
         resetearPrescripcionActual();
@@ -318,7 +355,7 @@ public class MedicoControlador implements Serializable {
     }
 
     private void crearPrescripcion(Paciente paciente){
-        prescripcionActual.setMedico(medicoActual);
+        prescripcionActual.setMedico(getMedicoActual());
         prescripcionActual.setTratamiento(tratamientoActual);
         prescripcionActual.setPaciente(paciente);
         prescripcionDAO.crear(prescripcionActual);
@@ -355,24 +392,6 @@ public class MedicoControlador implements Serializable {
 
     private void resetearDescripcionTratamiento() {
         descripcionTratamiento = null;
-    }
-
-    @SuppressWarnings("unused")
-    public void doCerrarDialgoNuevoTratamiento() {
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo nuevo."));
-    }
-
-    @SuppressWarnings("unused")
-    public void doCerrarDialgoVerTratamiento() {
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo ver."));
-    }
-
-    @SuppressWarnings("unused")
-    public void doCerrarDialgoEditarTratamiento() {
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Cierro dialogo editar."));
     }
 
 }
