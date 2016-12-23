@@ -291,7 +291,7 @@ public class MedicoControlador implements Serializable {
         if (validarFechas()) {
             crearTratamientoIfNull(paciente);
             crearPrescripcion(paciente);
-            resetearPrescripcionActual();
+            inicializarPrescripcionActual();
         } else {
             FacesContext.getCurrentInstance().addMessage("dialogoNuevoMensajes",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
@@ -305,7 +305,7 @@ public class MedicoControlador implements Serializable {
             prescripcionActual.setTratamiento(tratamientoActual);
             prescripcionActual.setPaciente(paciente);
             prescripciones.add(prescripcionActual);
-            resetearPrescripcionActual();
+            inicializarPrescripcionActual();
         } else {
             FacesContext.getCurrentInstance().addMessage("dialogoEditarMensajes",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
