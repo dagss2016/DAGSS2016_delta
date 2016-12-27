@@ -8,14 +8,18 @@ import es.uvigo.esei.dagss.dominio.daos.*;
 import es.uvigo.esei.dagss.dominio.entidades.*;
 import es.uvigo.esei.dagss.dominio.services.PrescripcionService;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.data.FilterEvent;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -200,15 +204,23 @@ public class MedicoControlador implements Serializable {
     }
 
     public void doGuardarTratamiento(Paciente paciente) {
+
         if (!descripcionTratamiento.isEmpty()) {
+
             tratamientoActual.setPrescripciones(prescripciones);
             tratamientoActual.setDescripcion(descripcionTratamiento);
             Tratamiento t = tratamientoDAO.actualizar(tratamientoActual);
             prescripcionService.generarRecetas(t);
             tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
-            RequestContext context = RequestContext.getCurrentInstance();
-            context.execute("PF('DialogoNuevo').hide();");
+            RequestContext.getCurrentInstance().execute("PF('DialogoNuevo').hide();");
             resetearVariables();
+
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            try {
+                ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             FacesContext.getCurrentInstance().addMessage("detallesCitaMensajes",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
@@ -219,43 +231,62 @@ public class MedicoControlador implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso",
                             "Es necesario indicar un nombre para el tratamiento."));
 
-            RequestContext context = RequestContext.getCurrentInstance();
-            context.execute("PF('DialogoNuevo').show();");
-
+            RequestContext.getCurrentInstance().execute("PF('DialogoNuevo').show();");
         }
     }
 
-    public void doActualizarTratamiento(Paciente paciente){
+    public void doActualizarTratamiento(Paciente paciente) {
 
-        List<Prescripcion> toRemove = new ArrayList<>();
+        if (!descripcionTratamiento.isEmpty()) {
 
-        for (Prescripcion p : prescripciones) {
-            if (!tratamientoActual.getPrescripciones().contains(p)){
-                tratamientoActual.getPrescripciones().add(p);
-                prescripcionDAO.crear(p);
-                prescripcionService.generarReceta(p);
+            List<Prescripcion> toRemove = new ArrayList<>();
+
+            for (Prescripcion p : prescripciones) {
+                if (!tratamientoActual.getPrescripciones().contains(p)){
+                    tratamientoActual.getPrescripciones().add(p);
+                    prescripcionDAO.crear(p);
+                    prescripcionService.generarReceta(p);
+                }
             }
-        }
 
-        for (Prescripcion p : tratamientoActual.getPrescripciones()) {
-            if (!prescripciones.contains(p)){
-                toRemove.add(p);
+            for (Prescripcion p : tratamientoActual.getPrescripciones()) {
+                if (!prescripciones.contains(p)){
+                    toRemove.add(p);
+                }
             }
+
+            for (Prescripcion p : toRemove ) {
+                tratamientoActual.getPrescripciones().remove(p);
+                prescripcionDAO.eliminar(p);
+                prescripcionService.borrarReceta(p);
+            }
+
+            tratamientoActual.setDescripcion(getDescripcionTratamiento());
+            tratamientoDAO.actualizar(tratamientoActual);
+            tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
+
+            RequestContext.getCurrentInstance().execute("PF('DialogoEditar').hide();");
+
+            resetearVariables();
+
+            FacesContext.getCurrentInstance().addMessage("detallesCitaMensajes",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+                            "Tratamiento modificado correctamente."));
+
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            try {
+                ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            RequestContext.getCurrentInstance().execute("PF('DialogoEditar').show();");
+
+            FacesContext.getCurrentInstance().addMessage("dialogoNuevoMensajes",
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso",
+                            "Es necesario indicar un nombre para el tratamiento."));
         }
-
-        for (Prescripcion p : toRemove ) {
-            tratamientoActual.getPrescripciones().remove(p);
-            prescripcionDAO.eliminar(p);
-            prescripcionService.borrarReceta(p);
-        }
-
-        tratamientoDAO.actualizar(tratamientoActual);
-        tratamientos = tratamientoDAO.buscarPorIDPaciente(paciente.getId());
-        resetearVariables();
-
-        FacesContext.getCurrentInstance().addMessage("detallesCitaMensajes",
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
-                        "Tratamiento modificado correctamente."));
     }
 
     public void doEditarTratamiento() {
@@ -264,6 +295,8 @@ public class MedicoControlador implements Serializable {
         for (Prescripcion p: tratamientoActual.getPrescripciones()) {
             prescripciones.add(p);
         }
+        setDescripcionTratamiento(tratamientoActual.getDescripcion());
+        RequestContext.getCurrentInstance().update("@(tablaListadoTratamientos)");
     }
 
     public void doBorrarTratamiento() {
@@ -278,12 +311,13 @@ public class MedicoControlador implements Serializable {
 
     public void doCancelarNuevoTratamiento(){
         tratamientoDAO.eliminar(tratamientoActual);
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('DialogoNuevo').hide();");
+        RequestContext.getCurrentInstance().execute("PF('DialogoNuevo').hide();");
         resetearVariables();
     }
+
     public void doCancelarEditarTratamiento(){
         tratamientos = tratamientoDAO.buscarPorIDPaciente(tratamientoActual.getPaciente().getId());
+        RequestContext.getCurrentInstance().execute("PF('DialogoEditar').hide();");
         resetearVariables();
     }
 

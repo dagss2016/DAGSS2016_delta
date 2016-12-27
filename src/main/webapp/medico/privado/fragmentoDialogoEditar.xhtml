@@ -67,7 +67,7 @@
                     <p:panelGrid columns="2" styleClass="ui-noborder">
                         <p:outputLabel value="Descripcion del Tratamiento" for="descripcion"/>
                         <p:inputTextarea id="descripcion" cols="50" rows="1"
-                                         value="#{medicoControlador.tratamientoActual.descripcion}" required="true">
+                                         value="#{medicoControlador.descripcionTratamiento}" required="true">
                             <p:ajax update="@this"/>
                         </p:inputTextarea>
                     </p:panelGrid>
@@ -76,6 +76,7 @@
                 <p:dataTable id="tablaListadoEditar"
                              value="#{medicoControlador.prescripciones}"
                              var="prescripcion"
+                             rowSelectMode="single"
                              paginator="true" paginatorPosition="bottom" rows="6" rowKey="#{prescripcion.id}">
 
 
@@ -119,13 +120,13 @@
                             <b:commandButton id="botonGuardarEditar" styleClass="btn-success"
                                              iconAwesome="fa-floppy-o" value="Guardar"
                                              disabled="#{empty medicoControlador.prescripciones}"
-                                             onclick="PF('DialogoEditar').hide()"
                                              actionListener="#{medicoControlador.doActualizarTratamiento(agendaControlador.citaActual.paciente)}"
                                              update=":formularioEditar:tablaListadoEditar,:formularioEditarPrescripcion"/>
 
                             <b:commandButton value="Cancelar" styleClass="btn-danger" iconAwesome="fa-times"
-                                             onclick="PF('DialogoEditar').hide()"
-                                             actionListener="#{medicoControlador.doCancelarEditarTratamiento}"/>
+                                             action="#{medicoControlador.doCancelarEditarTratamiento}">
+                                <p:ajax event="click" listener="#{medicoControlador.doCancelarEditarTratamiento}"/>
+                            </b:commandButton>
                         </div>
                     </f:facet>
 

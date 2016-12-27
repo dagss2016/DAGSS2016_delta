@@ -113,7 +113,7 @@
                         <h:panelGrid columns="2" cellpadding="10">
                             <h:form id="formularioListadoTratamientos" styleClass="form">
                                 <!--@elvariable id="tratamiento" type="es.uvigo.esei.dagss.dominio.entidades.Tratamiento"-->
-                                <p:dataTable id="tablaListadoTratamientos" styleClass="table table-responsive"
+                                <p:dataTable id="tablaListadoTratamientos" widgetVar="tablaListadoTratamientos" styleClass="table table-responsive"
                                              value="#{medicoControlador.tratamientos}"
                                              var="tratamiento"
                                              selectionMode="single"
